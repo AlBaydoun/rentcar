@@ -4,7 +4,8 @@ import { ContactShadows, Float, PerspectiveCamera } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
-import { CarModel, type BodyStyle } from './CarModel';
+import { CarModel } from './CarModel';
+import type { BodyStyle } from '@/lib/body-style';
 import { HorizonGrid, LightStreaks, Motes, ReflectiveFloor, StudioEnvironment } from './Stage';
 import { SceneCanvas, useReducedMotion } from './SceneCanvas';
 

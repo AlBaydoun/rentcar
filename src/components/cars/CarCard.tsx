@@ -5,32 +5,10 @@ import { motion } from 'framer-motion';
 import { Fuel, Gauge, Star, Users, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui';
 import { CarSilhouette } from './CarSilhouette';
-import { bodyStyleForCategory } from '@/components/three/CarModel';
+import { bodyStyleForCategory } from '@/lib/body-style';
 import { formatMoney, money } from '@/lib/domain/money';
 import type { Currency } from '@/lib/domain/types';
-
-/** Maps a paint name to something that renders. Falls back to the brand amber. */
-export function paintHex(colour: string): string {
-  const name = colour.toLowerCase();
-  const table: [string, string][] = [
-    ['white', '#e8ecf4'],
-    ['black', '#22262f'],
-    ['grey', '#8b93a4'],
-    ['gray', '#8b93a4'],
-    ['silver', '#c2c8d4'],
-    ['red', '#e0483c'],
-    ['blue', '#4a7fe0'],
-    ['green', '#3fa878'],
-    ['yellow', '#e8be3f'],
-    ['orange', '#e2853c'],
-    ['brown', '#9a7150'],
-    ['beige', '#cbb99a'],
-  ];
-  for (const [key, hex] of table) {
-    if (name.includes(key)) return hex;
-  }
-  return '#ffa62b';
-}
+import { paintHex } from '@/lib/paint';
 
 export interface CarCardData {
   id: string;

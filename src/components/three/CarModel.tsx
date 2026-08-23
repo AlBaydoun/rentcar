@@ -13,7 +13,9 @@ import * as THREE from 'three';
  * ships with zero downloaded assets: nothing to fetch, nothing to fail.
  */
 
-export type BodyStyle = 'HATCH' | 'SUV' | 'SEDAN' | 'SPORTS' | 'VAN';
+import type { BodyStyle } from '@/lib/body-style';
+
+export type { BodyStyle };
 
 interface Profile {
   /** Side profile of the painted body, as [length, height] pairs. */
@@ -75,25 +77,6 @@ const PROFILES: Record<BodyStyle, Profile> = {
     width: 1.84, glassWidth: 1.68, wheelRadius: 0.37, wheelBase: 1.58, track: 1.02, rideHeight: 0.40,
   },
 };
-
-export function bodyStyleForCategory(category: string): BodyStyle {
-  switch (category) {
-    case 'SUV':
-    case 'PICKUP':
-      return 'SUV';
-    case 'VAN':
-      return 'VAN';
-    case 'SPORTS':
-    case 'CONVERTIBLE':
-      return 'SPORTS';
-    case 'SEDAN':
-    case 'ESTATE':
-    case 'LUXURY':
-      return 'SEDAN';
-    default:
-      return 'HATCH';
-  }
-}
 
 function extrude(points: [number, number][], depth: number, bevel: number) {
   const shape = new THREE.Shape();
@@ -271,9 +254,9 @@ export function CarModel({
       </mesh>
 
       {/* Rocker panel, which grounds the body visually */}
-      <mesh position={[0, profile.rideHeight * 0.55, 0]}>
-        <boxGeometry args={[Math.abs(noseX - tailX) * 0.7, 0.07, profile.width + 0.06]} />
-        <meshStandardMaterial color="#0d0f14" roughness={0.85} />
+      <mesh position={[0, profile.rideHeight * 0.42, 0]}>
+        <boxGeometry args={[Math.abs(noseX - tailX) * 0.58, 0.05, profile.width + 0.08]} />
+        <meshStandardMaterial color="#0d0f14" roughness={0.9} />
       </mesh>
 
       {/* Front grille */}
@@ -289,15 +272,15 @@ export function CarModel({
       {[1, -1].map((side) => (
         <mesh
           key={`head-${side}`}
-          position={[noseX - 0.09, beltY - 0.15, side * profile.width * 0.31]}
-          rotation={[0, 0, -0.1]}
+          position={[noseX - 0.04, beltY - 0.13, side * profile.width * 0.33]}
+          rotation={[0, 0, -0.08]}
           onClick={handleClick('FRONT_BUMPER')}
         >
-          <boxGeometry args={[0.12, 0.1, profile.width * 0.24]} />
+          <boxGeometry args={[0.07, 0.075, profile.width * 0.2]} />
           <meshStandardMaterial
             color="#fff6e2"
-            emissive="#ffe9c0"
-            emissiveIntensity={lightsOn ? 3.2 : 0.1}
+            emissive="#ffe4b0"
+            emissiveIntensity={lightsOn ? 1.6 : 0.08}
             toneMapped={false}
           />
         </mesh>
@@ -309,7 +292,7 @@ export function CarModel({
         <meshStandardMaterial
           color="#ff3b30"
           emissive="#ff2418"
-          emissiveIntensity={lightsOn ? 2.4 : 0.15}
+          emissiveIntensity={lightsOn ? 1.4 : 0.12}
           toneMapped={false}
         />
       </mesh>
