@@ -9,7 +9,7 @@ import { StatusPill } from '@/components/dashboard/StatusPill';
 import { BookingTimeline, EventLog } from '@/components/dashboard/BookingTimeline';
 import { MessageThread } from '@/components/dashboard/MessageThread';
 import { CancelBooking, PayNow, TripStep } from '@/components/dashboard/TripActions';
-import { Badge, Card, KeyValue } from '@/components/ui';
+import { Badge, ButtonLink, Card, KeyValue } from '@/components/ui';
 import { STATUS_NARRATIVE } from '@/lib/domain/booking-state-machine';
 import { addressIsRevealed } from '@/lib/server/booking-service';
 import { getCountry } from '@/lib/domain/countries';
@@ -270,6 +270,21 @@ export default async function TripPage({
               label="Start the handover"
               description="Open the joint inspection when you meet the owner. You will photograph the car together and both sign before the keys change hands."
             />
+          ) : null}
+
+          {status === 'HANDOVER_PENDING' || status === 'RETURN_PENDING' ? (
+            <Card className="p-6">
+              <h2 className="text-[14px] font-semibold text-chalk">
+                {status === 'HANDOVER_PENDING' ? 'Handover inspection' : 'Return inspection'}
+              </h2>
+              <p className="mt-2 text-[13px] leading-relaxed text-mist">
+                Record the car&rsquo;s condition together and sign. The booking moves on once both
+                of you have.
+              </p>
+              <ButtonLink href={`/dashboard/trips/${booking.id}/inspection`} size="md" className="mt-4 w-full">
+                Open the inspection
+              </ButtonLink>
+            </Card>
           ) : null}
 
           {status === 'ACTIVE' ? (

@@ -305,3 +305,77 @@ export async function sendMessageAction(
   revalidatePath(`/dashboard/owner/bookings/${parsed.data.bookingId}`);
   return { ok: true };
 }
+
+/**
+ * Saves an inspection and, when both parties have signed, closes it.
+ *
+ * The signature is per-party: whoever submits signs their own side, and the
+ * booking only advances once both signatures exist — which is the guard the
+ * state machine checks.
+ */
+export async function saveInspectionAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const user = await requireUser();
+  const bookingId = String(formData.get('bookingId') ?? '');
+  const phase = String(formData.get('phase') ?? '') === 'RETURN' ? 'RETURN' : 'HANDOVER';
+
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    select: { renterId: true, ownerId: true, status: true },
+  });
+  if (!booking) return { ok: false, message: 'Booking not found.' };
+
+  const isOwner = booking.ownerId === user.id;
+  const isRenter = booking.renterId === user.id;
+  if (!isOwner && !isRenter) return { ok: false, message: 'That booking is not yours.' };
+
+  const odometerKm = Number(formData.get('odometerKm') ?? 0);
+  const fuelLevel = Number(formData.get('fuelLevel') ?? 1);
+  const cleanliness = String(formData.get('cleanliness') ?? 'CLEAN');
+  const notes = String(formData.get('notes') ?? '');
+  const damages = parseExtras(formData.get('damages'));
+  const sign = formData.get('sign') === 'on' || formData.get('sign') === 'true';
+
+  if (!Number.isFinite(odometerKm) || odometerKm < 0) {
+    return { ok: false, errors: { odometerKm: 'Enter the odometer reading.' } };
+  }
+  if (!Number.isFinite(fuelLevel) || fuelLevel < 0 || fuelLevel > 1) {
+    return { ok: false, errors: { fuelLevel: 'Fuel level must be between empty and full.' } };
+  }
+
+  const now = new Date();
+  await prisma.inspection.upsert({
+    where: { bookingId_phase: { bookingId, phase } },
+    create: {
+      bookingId,
+      phase,
+      odometerKm,
+      fuelLevel,
+      cleanliness,
+      notes,
+      damagesJson: JSON.stringify(damages),
+      ownerSignedAt: isOwner && sign ? now : null,
+      renterSignedAt: isRenter && sign ? now : null,
+    },
+    update: {
+      odometerKm,
+      fuelLevel,
+      cleanliness,
+      notes,
+      damagesJson: JSON.stringify(damages),
+      ...(sign ? (isOwner ? { ownerSignedAt: now } : { renterSignedAt: now }) : {}),
+    },
+  });
+
+  revalidatePath(`/dashboard/trips/${bookingId}/inspection`);
+  revalidatePath(`/dashboard/trips/${bookingId}`);
+  revalidatePath(`/dashboard/owner/bookings/${bookingId}`);
+
+  return {
+    ok: true,
+    message: sign ? 'Signed. The other party signs on their side.' : 'Saved.',
+    bookingId,
+  };
+}

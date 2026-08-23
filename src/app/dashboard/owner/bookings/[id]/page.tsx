@@ -10,7 +10,7 @@ import { RiskBreakdown } from '@/components/dashboard/RiskBreakdown';
 import { OwnerDecision } from '@/components/dashboard/OwnerDecision';
 import { BookingTimeline, EventLog } from '@/components/dashboard/BookingTimeline';
 import { MessageThread } from '@/components/dashboard/MessageThread';
-import { Badge, Card, KeyValue } from '@/components/ui';
+import { Badge, ButtonLink, Card, KeyValue } from '@/components/ui';
 import { getCountry } from '@/lib/domain/countries';
 import { formatMoney, money } from '@/lib/domain/money';
 import { ageOn, DOCUMENT_LABELS, monthsBetween } from '@/lib/domain/documents';
@@ -316,6 +316,25 @@ export default async function OwnerBookingPage({
               renterFirstName={renter.fullName.split(' ')[0]}
               deadline={booking.approvalDeadline}
             />
+          ) : null}
+
+          {['HANDOVER_PENDING', 'RETURN_PENDING'].includes(booking.status) ? (
+            <Card className="p-6">
+              <h2 className="text-[14px] font-semibold text-chalk">
+                {booking.status === 'HANDOVER_PENDING' ? 'Handover inspection' : 'Return inspection'}
+              </h2>
+              <p className="mt-2 text-[13px] leading-relaxed text-mist">
+                Walk around the car with {renter.fullName.split(' ')[0]} and sign the record
+                together.
+              </p>
+              <ButtonLink
+                href={`/dashboard/trips/${booking.id}/inspection`}
+                size="md"
+                className="mt-4 w-full"
+              >
+                Open the inspection
+              </ButtonLink>
+            </Card>
           ) : null}
 
           <RiskBreakdown risk={risk} />
