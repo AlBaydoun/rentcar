@@ -5,24 +5,11 @@ import { useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { Badge, Button, Select } from '@/components/ui';
-import { VEHICLE_CATEGORIES } from '@/lib/domain/types';
+import { VEHICLE_CATEGORIES, type VehicleCategory } from '@/lib/domain/types';
+import { CATEGORY_LABELS } from '@/lib/labels';
 import { formatMoney, money } from '@/lib/domain/money';
 import { cn } from '@/lib/cn';
 
-const CATEGORY_LABELS: Record<string, string> = {
-  CITY: 'City',
-  ECONOMY: 'Economy',
-  COMPACT: 'Compact',
-  SEDAN: 'Saloon',
-  ESTATE: 'Estate',
-  SUV: 'SUV',
-  VAN: 'Van',
-  PICKUP: 'Pickup',
-  LUXURY: 'Luxury',
-  SPORTS: 'Sports',
-  CONVERTIBLE: 'Convertible',
-  ELECTRIC: 'Electric',
-};
 
 export function SearchFilters({
   facets,
@@ -125,7 +112,7 @@ export function SearchFilters({
                     : 'border-white/10 text-mist hover:border-white/25 hover:text-chalk',
                 )}
               >
-                {CATEGORY_LABELS[category] ?? category}
+                {CATEGORY_LABELS[category as VehicleCategory] ?? category}
                 <span className="ml-1.5 text-slate-dim">{count}</span>
               </button>
             );

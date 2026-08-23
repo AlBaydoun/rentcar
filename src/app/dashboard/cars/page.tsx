@@ -41,7 +41,7 @@ export default async function MyCarsPage() {
             {vehicles.length} {vehicles.length === 1 ? 'listing' : 'listings'}.
           </p>
         </div>
-        <ButtonLink href="/host" size="sm">
+        <ButtonLink href="/dashboard/cars/new" size="sm">
           <Plus size={14} />
           List another car
         </ButtonLink>
@@ -54,7 +54,7 @@ export default async function MyCarsPage() {
           title="No cars listed yet"
           description="Set your own price, block the dates you need it, and approve only the people you want driving it."
           action={
-            <ButtonLink href="/host" size="lg">
+            <ButtonLink href="/dashboard/cars/new" size="lg">
               List your car
             </ButtonLink>
           }

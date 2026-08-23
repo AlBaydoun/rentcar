@@ -67,6 +67,7 @@ const PROTECTIONS = [
 
 export default async function HostPage() {
   const user = await getCurrentUser();
+  const startHref = user ? '/dashboard/cars/new' : '/signup';
 
   return (
     <>
@@ -74,7 +75,7 @@ export default async function HostPage() {
       <SiteHeader user={user} />
 
       <main>
-        <HostHero />
+        <HostHero startHref={startHref} />
 
         <section id="control" className="relative py-28 sm:py-32">
           <Container>
@@ -235,8 +236,8 @@ export default async function HostPage() {
                   Setting up a listing takes about ten minutes. Approving a request takes about ten
                   seconds.
                 </p>
-                <ButtonLink href="/signup" size="xl" className="relative mt-9">
-                  Get started
+                <ButtonLink href={startHref} size="xl" className="relative mt-9">
+                  {user ? 'List your car' : 'Get started'}
                 </ButtonLink>
               </Card>
             </Reveal>

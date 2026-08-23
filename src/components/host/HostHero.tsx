@@ -7,7 +7,7 @@ import { Badge, ButtonLink, Container } from '@/components/ui';
 import { Magnetic, SplitText } from '@/components/motion/primitives';
 
 /** Owner-facing hero — the scene sits on the left, mirroring the renter hero. */
-export function HostHero() {
+export function HostHero({ startHref = '/signup' }: { startHref?: string }) {
   const { scrollY } = useScroll();
   const sceneY = useTransform(scrollY, [0, 700], [0, 90]);
   const sceneOpacity = useTransform(scrollY, [0, 520], [1, 0.2]);
@@ -69,7 +69,7 @@ export function HostHero() {
             className="mt-9 flex flex-wrap gap-3 lg:justify-end"
           >
             <Magnetic>
-              <ButtonLink href="/signup" size="xl" className="group">
+              <ButtonLink href={startHref} size="xl" className="group">
                 List your car
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
               </ButtonLink>

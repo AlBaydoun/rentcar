@@ -145,6 +145,7 @@ src/
 │  ├─ cars/[id]/            3D viewer, availability grid, live-quoting panel
 │  ├─ dashboard/
 │  │  ├─ page.tsx           Renter trips
+│  │  ├─ cars/new/          Listing wizard with a live 3D preview
 │  │  ├─ trips/[id]/        Trip detail, payment, cancellation
 │  │  ├─ trips/[id]/inspection/   Joint walk-around with 3D damage pinning
 │  │  ├─ owner/             Request inbox
@@ -184,6 +185,21 @@ Every primitive in `components/motion/primitives.tsx` checks
 decoration; content is never hidden behind an animation that might not run.
 
 ---
+
+## Listing a car
+
+`/dashboard/cars/new` is a five-step wizard — the car, where it lives, the
+price, the rules, the listing copy. Two things about it are worth calling out:
+
+- The 3D preview updates as the owner picks a category and a colour, so they
+  are looking at their own car by the time they set a price on it.
+- The suggested price range comes from `suggestDailyRate` run against real
+  comparable listings in the same city (falling back to the whole market when
+  there are fewer than three), depreciated for the car's age. It is a
+  suggestion the owner can ignore — nothing overrides what they type.
+
+A new listing is created as `PENDING_REVIEW` with placeholder rows for the
+documents its market requires, and cannot be booked until those clear.
 
 ## Privacy decisions worth knowing
 
