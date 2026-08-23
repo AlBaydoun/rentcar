@@ -16,7 +16,14 @@ import {
   messageSchema,
   ownerDecisionSchema,
 } from '@/lib/validation';
-import type { ExtraCode, InsuranceTier } from '@/lib/domain/types';
+import { canTransitionDocument } from '@/lib/domain/documents';
+import { getCountry } from '@/lib/domain/countries';
+import type {
+  CountryCode,
+  ExtraCode,
+  InsuranceTier,
+  VerificationStatus,
+} from '@/lib/domain/types';
 
 export interface ActionState {
   ok: boolean;
@@ -378,4 +385,62 @@ export async function saveInspectionAction(
     message: sign ? 'Signed. The other party signs on their side.' : 'Saved.',
     bookingId,
   };
+}
+
+/** Admin review of a single document. */
+export async function reviewDocumentAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const user = await requireUser();
+  if (user.role !== 'ADMIN') return { ok: false, message: 'Administrator access required.' };
+
+  const documentId = String(formData.get('documentId') ?? '');
+  const decision = String(formData.get('decision') ?? '');
+  const reason = String(formData.get('reason') ?? '').trim();
+
+  const document = await prisma.document.findUnique({ where: { id: documentId } });
+  if (!document) return { ok: false, message: 'Document not found.' };
+
+  const target = decision === 'APPROVE' ? 'VERIFIED' : 'REJECTED';
+  // Reviewers can only walk legal edges, which keeps the audit trail honest.
+  const from = document.status as VerificationStatus;
+  const viaReview = from === 'PENDING' ? 'IN_REVIEW' : from;
+  if (!canTransitionDocument(viaReview, target)) {
+    return { ok: false, message: `Cannot move a ${from.toLowerCase()} document to ${target.toLowerCase()}.` };
+  }
+  if (target === 'REJECTED' && !reason) {
+    return { ok: false, errors: { reason: 'Give a reason the applicant can act on.' } };
+  }
+
+  await prisma.document.update({
+    where: { id: documentId },
+    data: {
+      status: target,
+      rejectionReason: target === 'REJECTED' ? reason : null,
+      reviewedAt: new Date(),
+      reviewedBy: user.id,
+    },
+  });
+
+  // A profile is verified once every document its market requires has passed.
+  if (document.userId) {
+    const owner = await prisma.user.findUnique({
+      where: { id: document.userId },
+      include: { documents: true },
+    });
+    if (owner) {
+      const required = getCountry(owner.country as CountryCode).requiredRenterDocuments;
+      const allVerified = required.every((type) =>
+        owner.documents.some((entry) => entry.type === type && entry.status === 'VERIFIED'),
+      );
+      await prisma.user.update({
+        where: { id: owner.id },
+        data: { verificationStatus: allVerified ? 'VERIFIED' : 'IN_REVIEW' },
+      });
+    }
+  }
+
+  revalidatePath('/admin');
+  return { ok: true, message: `Document ${target.toLowerCase()}.` };
 }
