@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, CalendarDays, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 import { HeroScene } from '@/components/three/HeroScene';
-import { Badge, ButtonLink, Container } from '@/components/ui';
+import { Badge, Container } from '@/components/ui';
 import { Magnetic, SplitText } from '@/components/motion/primitives';
 import { GERMANY, LEBANON } from '@/lib/domain/countries';
 import { cn } from '@/lib/cn';
@@ -54,9 +54,9 @@ export function Hero() {
           y: sceneY,
           opacity: sceneOpacity,
           maskImage:
-            'radial-gradient(115% 92% at 50% 46%, #000 42%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+            'radial-gradient(72% 68% at 50% 50%, #000 20%, rgba(0,0,0,0.5) 44%, transparent 62%)',
           WebkitMaskImage:
-            'radial-gradient(115% 92% at 50% 46%, #000 42%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+            'radial-gradient(72% 68% at 50% 50%, #000 20%, rgba(0,0,0,0.5) 44%, transparent 62%)',
         }}
         className="pointer-events-none absolute bottom-0 left-1/2 h-[46svh] w-[125%] -translate-x-1/2 lg:left-auto lg:right-[-6%] lg:top-1/2 lg:h-[86svh] lg:w-[62%] lg:-translate-x-0 lg:-translate-y-1/2"
       >

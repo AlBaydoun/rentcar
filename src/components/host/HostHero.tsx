@@ -19,9 +19,9 @@ export function HostHero() {
           y: sceneY,
           opacity: sceneOpacity,
           maskImage:
-            'radial-gradient(115% 92% at 50% 46%, #000 42%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+            'radial-gradient(72% 68% at 50% 50%, #000 20%, rgba(0,0,0,0.5) 44%, transparent 62%)',
           WebkitMaskImage:
-            'radial-gradient(115% 92% at 50% 46%, #000 42%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+            'radial-gradient(72% 68% at 50% 50%, #000 20%, rgba(0,0,0,0.5) 44%, transparent 62%)',
         }}
         className="pointer-events-none absolute bottom-0 left-1/2 h-[44svh] w-[125%] -translate-x-1/2 lg:left-[-8%] lg:top-1/2 lg:h-[84svh] lg:w-[60%] lg:-translate-x-0 lg:-translate-y-1/2"
       >

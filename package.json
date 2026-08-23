@@ -2,12 +2,12 @@
   "name": "karrent",
   "version": "0.1.0",
   "private": true,
-  "description": "KarRent — peer-to-peer car rental marketplace for Germany and Lebanon",
+  "description": "KarRent \u2014 peer-to-peer car rental marketplace for Germany and Lebanon",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -39,6 +39,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^26.2.0",

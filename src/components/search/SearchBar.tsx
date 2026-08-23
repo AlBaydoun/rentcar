@@ -3,7 +3,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { CalendarDays, MapPin, Search } from 'lucide-react';
-import { Select } from '@/components/ui';
 import { GERMANY, LEBANON } from '@/lib/domain/countries';
 
 /** Compact date/place bar that sits above the results. */

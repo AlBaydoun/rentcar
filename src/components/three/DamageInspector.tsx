@@ -1,7 +1,7 @@
 'use client';
 
 import { Html, OrbitControls } from '@react-three/drei';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import * as THREE from 'three';
 import { CarModel } from './CarModel';
 import { StudioEnvironment } from './Stage';

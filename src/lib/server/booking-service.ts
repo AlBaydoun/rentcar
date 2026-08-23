@@ -1,11 +1,7 @@
 import 'server-only';
 import { prisma } from '@/lib/db';
 import { getCountry } from '@/lib/domain/countries';
-import {
-  ageOn,
-  checkRenterEligibility,
-  monthsBetween,
-} from '@/lib/domain/documents';
+import { checkRenterEligibility, monthsBetween } from '@/lib/domain/documents';
 import { checkAvailability, demandIndexFromUtilisation, utilisation } from '@/lib/domain/availability';
 import {
   approvalDeadline,
@@ -17,7 +13,6 @@ import {
 import { assessRisk } from '@/lib/domain/risk';
 import { quote, type PriceQuote } from '@/lib/domain/pricing';
 import { computeRefund } from '@/lib/domain/cancellation';
-import { entriesForCapture } from '@/lib/domain/ledger';
 import { money } from '@/lib/domain/money';
 import type {
   BookingActor,
@@ -237,7 +232,6 @@ export async function createBookingRequest(params: CreateBookingParams) {
     );
   }
 
-  const now = new Date();
   const booking = await prisma.booking.create({
     data: {
       reference: bookingReference(),

@@ -73,36 +73,69 @@ export function StudioEnvironment({ intensity = 1 }: { intensity?: number }) {
   );
 }
 
-/** A dark reflective floor built from a plane and a radial fade. */
+/**
+ * The ground.
+ *
+ * A hard-edged floor makes a transparent canvas read as an opaque rectangle
+ * pasted onto the page, so both the surface and the light pool fade out
+ * radially via alpha maps and the whole thing dissolves into the background.
+ */
+function radialAlpha(stops: [number, number][]): THREE.CanvasTexture {
+  const size = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext('2d')!;
+  const gradient = context.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  for (const [offset, alpha] of stops) {
+    gradient.addColorStop(offset, `rgba(255,255,255,${alpha})`);
+  }
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, size, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
 export function ReflectiveFloor({ y = 0, colour = '#06070a' }: { y?: number; colour?: string }) {
-  const texture = useMemo(() => {
-    // Radial alpha gradient so the floor dissolves rather than ending on a hard edge.
-    const size = 256;
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const context = canvas.getContext('2d')!;
-    const gradient = context.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-    gradient.addColorStop(0, 'rgba(255,255,255,0.30)');
-    gradient.addColorStop(0.45, 'rgba(255,255,255,0.10)');
-    gradient.addColorStop(1, 'rgba(255,255,255,0)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, size, size);
-    const map = new THREE.CanvasTexture(canvas);
-    map.colorSpace = THREE.SRGBColorSpace;
-    return map;
-  }, []);
+  const surfaceAlpha = useMemo(
+    () =>
+      radialAlpha([
+        [0, 1],
+        [0.55, 0.85],
+        [0.82, 0.28],
+        [1, 0],
+      ]),
+    [],
+  );
+
+  const lightPool = useMemo(
+    () =>
+      radialAlpha([
+        [0, 0.3],
+        [0.45, 0.1],
+        [1, 0],
+      ]),
+    [],
+  );
 
   return (
     <group position={[0, y, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial color={colour} roughness={0.35} metalness={0.7} />
+        <circleGeometry args={[13, 64]} />
+        <meshStandardMaterial
+          color={colour}
+          roughness={0.35}
+          metalness={0.7}
+          transparent
+          alphaMap={surfaceAlpha}
+          depthWrite={false}
+        />
       </mesh>
       {/* Pool of light directly under the car */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
-        <planeGeometry args={[14, 14]} />
-        <meshBasicMaterial map={texture} transparent opacity={0.35} depthWrite={false} />
+        <circleGeometry args={[7, 48]} />
+        <meshBasicMaterial map={lightPool} transparent opacity={0.4} depthWrite={false} />
       </mesh>
     </group>
   );
@@ -204,11 +237,16 @@ export function Motes({ count = 120 }: { count?: number }) {
 export function HorizonGrid({ y = 0.004, colour = '#2a3348' }: { y?: number; colour?: string }) {
   const geometry = useMemo(() => {
     const points: number[] = [];
-    const half = 20;
+    const half = 12;
     const step = 1;
+    // Clipped to a disc so the grid fades with the floor rather than ending
+    // on a square edge.
+    const span = (offset: number) => Math.sqrt(Math.max(0, half * half - offset * offset));
     for (let i = -half; i <= half; i += step) {
-      points.push(-half, 0, i, half, 0, i);
-      points.push(i, 0, -half, i, 0, half);
+      const reach = span(i);
+      if (reach <= 0) continue;
+      points.push(-reach, 0, i, reach, 0, i);
+      points.push(i, 0, -reach, i, 0, reach);
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
@@ -217,7 +255,7 @@ export function HorizonGrid({ y = 0.004, colour = '#2a3348' }: { y?: number; col
 
   return (
     <lineSegments geometry={geometry} position={[0, y, 0]}>
-      <lineBasicMaterial color={colour} transparent opacity={0.28} depthWrite={false} />
+      <lineBasicMaterial color={colour} transparent opacity={0.16} depthWrite={false} />
     </lineSegments>
   );
 }
