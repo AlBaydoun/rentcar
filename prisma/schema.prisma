@@ -1,0 +1,447 @@
+// KarRent — peer-to-peer car rental for Germany and Lebanon.
+//
+// SQLite in development, PostgreSQL in production. The schema deliberately
+// avoids native enums and arrays so the same file works against both; the
+// enum vocabularies live in src/lib/domain/types.ts and are enforced by zod
+// at the boundary.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity
+// ---------------------------------------------------------------------------
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  passwordHash      String
+  fullName          String
+  phone             String?
+  dateOfBirth       DateTime
+  // RENTER | OWNER | BOTH | ADMIN
+  role              String    @default("BOTH")
+  // PRIVATE | BUSINESS
+  ownerType         String    @default("PRIVATE")
+  // Market the account belongs to: DE | LB
+  country           String
+  residenceCountry  String
+  city              String?
+  locale            String    @default("en")
+  avatarUrl         String?
+  bio               String?
+  // UNVERIFIED | PENDING | IN_REVIEW | VERIFIED | REJECTED | EXPIRED
+  verificationStatus String   @default("UNVERIFIED")
+  emailVerifiedAt   DateTime?
+  phoneVerifiedAt   DateTime?
+  // Payout preferences
+  payoutMethod      String?
+  payoutReference   String?
+  // Denormalised reputation, recomputed on trip completion
+  completedTripsAsRenter Int  @default(0)
+  completedTripsAsOwner  Int  @default(0)
+  cancelledAsRenter      Int  @default(0)
+  cancelledAsOwner       Int  @default(0)
+  lateReturns            Int  @default(0)
+  liableClaims           Int  @default(0)
+  paymentFlags           Int  @default(0)
+  ratingAsRenterSum      Int  @default(0)
+  ratingAsRenterCount    Int  @default(0)
+  ratingAsOwnerSum       Int  @default(0)
+  ratingAsOwnerCount     Int  @default(0)
+  responseCount          Int  @default(0)
+  responseTotalMinutes   Int  @default(0)
+  requestsReceived       Int  @default(0)
+  requestsAnswered       Int  @default(0)
+  requestsApproved       Int  @default(0)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  documents         Document[]
+  vehicles          Vehicle[]
+  bookingsAsRenter  Booking[]  @relation("RenterBookings")
+  bookingsAsOwner   Booking[]  @relation("OwnerBookings")
+  messages          Message[]
+  notifications     Notification[]
+  reviewsWritten    Review[]   @relation("ReviewAuthor")
+  reviewsReceived   Review[]   @relation("ReviewSubject")
+  sessions          Session[]
+  bookingEvents     BookingEvent[]
+
+  @@index([country, role])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  userAgent String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Document {
+  id              String    @id @default(cuid())
+  userId          String?
+  vehicleId       String?
+  // See DOCUMENT_TYPES in src/lib/domain/types.ts
+  type            String
+  status          String    @default("PENDING")
+  issuingCountry  String
+  documentNumber  String?
+  holderName      String?
+  issuedAt        DateTime?
+  expiresAt       DateTime?
+  fileUrl         String?
+  backFileUrl     String?
+  rejectionReason String?
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  // JSON array of automated screening findings
+  autoFindings    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@index([vehicleId, type])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Supply
+// ---------------------------------------------------------------------------
+
+model Vehicle {
+  id              String   @id @default(cuid())
+  ownerId         String
+  make            String
+  model           String
+  variant         String?
+  year            Int
+  // See VEHICLE_CATEGORIES
+  category        String
+  transmission    String
+  fuelType        String
+  seats           Int
+  doors           Int
+  powerHp         Int?
+  colour          String
+  // Stored masked; only revealed to the renter on a confirmed booking
+  licensePlate    String
+  vin             String?
+  odometerKm      Int
+  tankCapacityL   Int      @default(50)
+
+  // Market and location
+  country         String
+  city            String
+  // Approximate coordinates shown before booking
+  areaLat         Float
+  areaLng         Float
+  // Exact address, revealed only once a booking is confirmed
+  exactAddress    String
+  exactLat        Float
+  exactLng        Float
+
+  // Pricing, in minor units of the market currency
+  dailyRate       Int
+  estimatedValue  Int
+  weeklyDiscount  Float    @default(0)
+  monthlyDiscount Float    @default(0)
+  cleaningFee     Int      @default(0)
+  baseDeposit     Int
+  includedKmPerDay Int
+  extraKmPrice    Int
+  deliveryAvailable Boolean @default(false)
+  deliveryPricePerKm Int   @default(0)
+  deliveryFreeRadiusKm Int @default(0)
+
+  // Booking rules
+  minRentalDays   Int      @default(1)
+  maxRentalDays   Int      @default(30)
+  advanceNoticeHours Int   @default(3)
+  bufferHours     Int      @default(2)
+  bookingHorizonDays Int   @default(365)
+  instantBook     Boolean  @default(false)
+  cancellationPolicy String @default("MODERATE")
+  pickupWindowStart String @default("07:00")
+  pickupWindowEnd   String @default("22:00")
+  blockedWeekdays String   @default("")
+
+  // House rules
+  smokingAllowed  Boolean  @default(false)
+  petsAllowed     Boolean  @default(false)
+  crossBorderAllowed Boolean @default(false)
+
+  // JSON string arrays
+  features        String   @default("[]")
+  photos          String   @default("[]")
+  description     String   @default("")
+
+  status          String   @default("DRAFT")
+  // Denormalised stats
+  tripCount       Int      @default(0)
+  ratingSum       Int      @default(0)
+  ratingCount     Int      @default(0)
+  viewCount       Int      @default(0)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  owner     User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  documents Document[]
+  bookings  Booking[]
+  blocks    AvailabilityBlock[]
+  reviews   Review[]
+
+  @@index([country, city, status])
+  @@index([ownerId])
+  @@index([category, status])
+}
+
+model AvailabilityBlock {
+  id        String   @id @default(cuid())
+  vehicleId String
+  start     DateTime
+  end       DateTime
+  // OWNER_BLOCKED | MAINTENANCE | BOOKED | DOCUMENTS_EXPIRED
+  reason    String
+  bookingId String?
+  note      String?
+  createdAt DateTime @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId, start, end])
+}
+
+// ---------------------------------------------------------------------------
+// Demand
+// ---------------------------------------------------------------------------
+
+model Booking {
+  id         String   @id @default(cuid())
+  reference  String   @unique
+  vehicleId  String
+  renterId   String
+  ownerId    String
+  country    String
+
+  startAt    DateTime
+  endAt      DateTime
+  // See BOOKING_STATUSES
+  status     String   @default("DRAFT")
+
+  // Quote snapshot — frozen at request time so the price cannot drift
+  currency        String
+  days            Int
+  insuranceTier   String
+  extrasJson      String  @default("[]")
+  quoteJson       String
+  renterTotal     Int
+  deposit         Int
+  insuranceExcess Int
+  ownerGross      Int
+  ownerCommission Int
+  ownerPayout     Int
+  vatAmount       Int
+  includedKm      Int
+
+  deliveryDistanceKm Int    @default(0)
+  crossBorderJson    String @default("[]")
+  renterMessage      String?
+
+  // Owner decision
+  approvalDeadline DateTime?
+  decidedAt        DateTime?
+  declineReason    String?
+  documentsRequested String?
+
+  // Risk snapshot at the moment the owner saw it
+  riskScore     Int?
+  riskTier      String?
+  riskJson      String?
+
+  // Payment
+  paymentStatus   String  @default("NONE")
+  paymentIntentId String?
+  authorizedAt    DateTime?
+  capturedAt      DateTime?
+  refundedAmount  Int     @default(0)
+
+  // Settlement
+  settlementJson  String?
+  finalCharge     Int     @default(0)
+  depositReturned Int     @default(0)
+
+  payoutScheduledAt DateTime?
+  payoutPaidAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vehicle     Vehicle        @relation(fields: [vehicleId], references: [id])
+  renter      User           @relation("RenterBookings", fields: [renterId], references: [id])
+  owner       User           @relation("OwnerBookings", fields: [ownerId], references: [id])
+  events      BookingEvent[]
+  inspections Inspection[]
+  messages    Message[]
+  ledger      LedgerEntry[]
+  claims      Claim[]
+  reviews     Review[]
+
+  @@index([renterId, status])
+  @@index([ownerId, status])
+  @@index([vehicleId, startAt, endAt])
+  @@index([status, approvalDeadline])
+}
+
+model BookingEvent {
+  id         String   @id @default(cuid())
+  bookingId  String
+  actorId    String?
+  // RENTER | OWNER | ADMIN | SYSTEM
+  actorRole  String
+  event      String
+  fromStatus String
+  toStatus   String
+  // JSON array of effects the orchestrator ran
+  effects    String   @default("[]")
+  note       String?
+  createdAt  DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  actor   User?   @relation(fields: [actorId], references: [id])
+
+  @@index([bookingId, createdAt])
+}
+
+model Inspection {
+  id            String    @id @default(cuid())
+  bookingId     String
+  // HANDOVER | RETURN
+  phase         String
+  odometerKm    Int?
+  fuelLevel     Float?
+  cleanliness   String    @default("CLEAN")
+  photosJson    String    @default("{}")
+  damagesJson   String    @default("[]")
+  notes         String    @default("")
+  ownerSignedAt DateTime?
+  renterSignedAt DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@unique([bookingId, phase])
+}
+
+model Claim {
+  id           String   @id @default(cuid())
+  bookingId    String
+  openedBy     String
+  status       String   @default("OPEN")
+  description  String
+  claimedAmount Int
+  approvedAmount Int?
+  evidenceJson String   @default("[]")
+  resolution   String?
+  resolvedAt   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model LedgerEntry {
+  id          String   @id @default(cuid())
+  bookingId   String
+  type        String
+  amount      Int
+  currency    String
+  fromAccount String
+  toAccount   String
+  description String
+  externalRef String?
+  isHold      Boolean  @default(false)
+  occurredAt  DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, occurredAt])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  bookingId String
+  senderId  String
+  body      String
+  // JSON array of attachment URLs
+  attachments String @default("[]")
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  sender  User    @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, createdAt])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  bookingId   String
+  vehicleId   String?
+  authorId    String
+  subjectId   String
+  // RENTER_TO_OWNER | OWNER_TO_RENTER
+  direction   String
+  rating      Int
+  cleanliness Int?
+  accuracy    Int?
+  communication Int?
+  convenience Int?
+  body        String
+  // Reviews stay hidden until both sides submit or the window closes
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  booking Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  author  User     @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  subject User     @relation("ReviewSubject", fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([bookingId, direction])
+  @@index([subjectId, publishedAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String
+  title     String
+  body      String
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}
