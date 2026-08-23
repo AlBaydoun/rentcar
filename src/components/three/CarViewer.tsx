@@ -91,8 +91,8 @@ export function CarViewer({
       </SceneCanvas>
 
       {/* Controls */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-        <div className="pointer-events-auto flex flex-wrap gap-1.5">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end gap-3 p-4">
+        <div className="no-scrollbar pointer-events-auto flex flex-1 gap-1.5 overflow-x-auto">
           {PAINTS.map((entry) => {
             const selected = (entry.hex ?? null) === paint;
             return (
@@ -104,7 +104,7 @@ export function CarViewer({
                 aria-label={entry.name}
                 aria-pressed={selected}
                 className={cn(
-                  'h-7 w-7 rounded-full border-2 transition-transform hover:scale-110',
+                  'h-7 w-7 shrink-0 rounded-full border-2 transition-transform hover:scale-110',
                   selected ? 'border-amber-400 scale-110' : 'border-white/20',
                 )}
                 style={{
@@ -118,7 +118,7 @@ export function CarViewer({
         <button
           type="button"
           onClick={() => setSpin((value) => !value)}
-          className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-ink-950/70 px-3 py-1.5 text-[11.5px] text-mist backdrop-blur transition-colors hover:text-chalk"
+          className="pointer-events-auto inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/12 bg-ink-950/70 px-3 py-1.5 text-[11.5px] text-mist backdrop-blur transition-colors hover:text-chalk"
         >
           <RotateCcw size={12} />
           {spin ? 'Pause' : 'Spin'}
