@@ -97,13 +97,14 @@ function radialAlpha(stops: [number, number][]): THREE.CanvasTexture {
   return texture;
 }
 
-export function ReflectiveFloor({ y = 0, colour = '#06070a' }: { y?: number; colour?: string }) {
+export function ReflectiveFloor({ y = 0, colour = '#080a0e' }: { y?: number; colour?: string }) {
   const surfaceAlpha = useMemo(
     () =>
       radialAlpha([
         [0, 1],
-        [0.55, 0.85],
-        [0.82, 0.28],
+        [0.36, 0.78],
+        [0.62, 0.22],
+        [0.85, 0],
         [1, 0],
       ]),
     [],
@@ -234,7 +235,7 @@ export function Motes({ count = 120 }: { count?: number }) {
 }
 
 /** A grid that fades with distance — the ground plane of the whole brand. */
-export function HorizonGrid({ y = 0.004, colour = '#2a3348' }: { y?: number; colour?: string }) {
+export function HorizonGrid({ y = 0.004, colour = '#2d3037' }: { y?: number; colour?: string }) {
   const geometry = useMemo(() => {
     const points: number[] = [];
     const half = 12;

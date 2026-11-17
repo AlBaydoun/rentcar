@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import {
   BadgeCheck,
   Ban,
@@ -147,7 +147,7 @@ export function ApprovalFlow() {
   const Icon = step.icon;
 
   return (
-    <section id="approval" className="relative py-28 sm:py-36">
+    <section id="approval" className="relative pt-16 pb-28 sm:pt-20 sm:pb-32">
       <Container>
         <Reveal>
           <SectionHeading
@@ -187,9 +187,9 @@ export function ApprovalFlow() {
                   {active && !paused && (
                     <motion.span
                       key={index}
-                      className="absolute inset-y-0 left-0 bg-amber-500/[0.09]"
-                      initial={{ width: '0%' }}
-                      animate={{ width: '100%' }}
+                      className="absolute inset-y-0 left-0 w-full origin-left bg-amber-500/[0.09]"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
                       transition={{ duration: DURATION / 1000, ease: 'linear' }}
                     />
                   )}
@@ -251,13 +251,19 @@ export function ApprovalFlow() {
           </div>
 
           {/* Detail surface */}
-          <div className="relative min-h-[340px]">
-            <AnimatePresence mode="wait">
+          {/*
+            No AnimatePresence here on purpose. `mode="wait"` empties the
+            container between steps, so the section collapsed and the page
+            jumped every time the walkthrough advanced. Keying the element
+            instead remounts it in the same commit — the crossfade happens
+            with nothing ever missing.
+          */}
+          <div className="relative min-h-[430px]">
+            <div>
               <motion.div
                 key={step.status}
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 className="surface h-full rounded-xl p-7 sm:p-9"
               >
@@ -362,7 +368,7 @@ export function ApprovalFlow() {
                   </motion.div>
                 )}
               </motion.div>
-            </AnimatePresence>
+            </div>
           </div>
         </div>
       </Container>

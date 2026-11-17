@@ -18,9 +18,25 @@ interface Spec {
   frontWheel: { x: number; r: number };
   rearWheel: { x: number; r: number };
   ground: number;
+  /** Footprint relative to a hatchback, so size carries real information. */
+  length: number;
 }
 
 const SPECS: Record<BodyStyle, Spec> = {
+  CITY: {
+    top: [
+      [40, 62], [44, 50], [62, 42], [100, 36], [112, 34],
+      [132, 16], [186, 15], [214, 36], [238, 40], [254, 48], [258, 64],
+    ],
+    windows: [
+      [[118, 34], [135, 19], [164, 18], [164, 34]],
+      [[172, 18], [184, 18], [206, 34], [172, 34]],
+    ],
+    frontWheel: { x: 88, r: 21 },
+    rearWheel: { x: 212, r: 21 },
+    ground: 80,
+    length: 0.82,
+  },
   HATCH: {
     top: [
       [14, 64], [18, 54], [40, 47], [92, 42], [110, 40],
@@ -33,6 +49,7 @@ const SPECS: Record<BodyStyle, Spec> = {
     frontWheel: { x: 72, r: 22 },
     rearWheel: { x: 226, r: 22 },
     ground: 80,
+    length: 1,
   },
   SEDAN: {
     top: [
@@ -46,6 +63,7 @@ const SPECS: Record<BodyStyle, Spec> = {
     frontWheel: { x: 70, r: 22 },
     rearWheel: { x: 232, r: 22 },
     ground: 80,
+    length: 1.08,
   },
   SUV: {
     top: [
@@ -59,6 +77,7 @@ const SPECS: Record<BodyStyle, Spec> = {
     frontWheel: { x: 74, r: 26 },
     rearWheel: { x: 228, r: 26 },
     ground: 80,
+    length: 1.06,
   },
   SPORTS: {
     top: [
@@ -72,6 +91,7 @@ const SPECS: Record<BodyStyle, Spec> = {
     frontWheel: { x: 68, r: 21 },
     rearWheel: { x: 234, r: 21 },
     ground: 80,
+    length: 1.03,
   },
   VAN: {
     top: [
@@ -86,6 +106,7 @@ const SPECS: Record<BodyStyle, Spec> = {
     frontWheel: { x: 62, r: 24 },
     rearWheel: { x: 236, r: 24 },
     ground: 80,
+    length: 1.14,
   },
 };
 
@@ -119,7 +140,7 @@ function polygon(points: [number, number][]): string {
 function Wheel({ cx, cy, r }: { cx: number; cy: number; r: number }) {
   return (
     <g>
-      <circle cx={cx} cy={cy} r={r} fill="#0a0c11" />
+      <circle cx={cx} cy={cy} r={r} fill="#0f1115" />
       <circle cx={cx} cy={cy} r={r} fill="none" stroke="#000000" strokeOpacity="0.6" strokeWidth="1" />
       <circle cx={cx} cy={cy} r={r * 0.56} fill="#171a22" />
       <circle
@@ -190,7 +211,9 @@ export function CarSilhouette({
 
       <ellipse cx="150" cy="106" rx="128" ry="8" fill={`url(#${id}-shadow)`} />
 
-      <g transform="translate(0, 6)">
+      <g
+        transform={`translate(150 ${spec.ground + 6}) scale(${spec.length}) translate(-150 -${spec.ground})`}
+      >
         {/* Wheels sit behind the body so the arch cut-outs frame them */}
         <Wheel cx={spec.frontWheel.x} cy={spec.ground} r={spec.frontWheel.r} />
         <Wheel cx={spec.rearWheel.x} cy={spec.ground} r={spec.rearWheel.r} />

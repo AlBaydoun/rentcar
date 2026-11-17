@@ -56,7 +56,7 @@ export function Protection() {
     tier === 'PLUS' ? 'bg-amber-500/[0.055]' : undefined;
 
   return (
-    <section id="protection" className="relative py-24 sm:py-32">
+    <section id="protection" className="relative pt-20 pb-28 sm:pt-24 sm:pb-32">
       <Container>
         <Reveal>
           <SectionHeading
@@ -66,15 +66,23 @@ export function Protection() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mt-12 overflow-x-auto">
-            <table className="w-full min-w-[640px] border-separate border-spacing-0 text-left">
+          <p className="record mt-10 flex items-center gap-2 text-[11px] text-slate-dim sm:hidden">
+            Swipe the table to compare tiers
+            <span aria-hidden>&rarr;</span>
+          </p>
+
+          <div className="mt-3 overflow-x-auto sm:mt-12">
+            <table className="w-full min-w-[600px] border-separate border-spacing-0 text-left">
               <caption className="sr-only">
                 KarRent protection tiers compared on a €48 per day compact car over four days
               </caption>
 
               <thead>
                 <tr>
-                  <th scope="col" className="w-[42%] pb-5 align-bottom">
+                  <th
+                    scope="col"
+                    className="sticky left-0 z-[var(--z-raised)] w-[42%] bg-ink-950 pb-5 pr-4 align-bottom"
+                  >
                     <span className="record text-[11px] text-slate-dim">
                       On a €48/day compact, 4 days
                     </span>
@@ -118,7 +126,7 @@ export function Protection() {
                 <tr>
                   <th
                     scope="row"
-                    className="border-t border-[var(--hairline-strong)] py-4 pr-6 align-top text-[13.5px] font-medium text-chalk"
+                    className="sticky left-0 z-[var(--z-raised)] border-t border-[var(--hairline-strong)] bg-ink-950 py-4 pr-6 align-top text-[13.5px] font-medium text-chalk"
                   >
                     Your excess
                     <span className="mt-1 block text-[12px] font-normal leading-snug text-slate-dim">
@@ -150,7 +158,7 @@ export function Protection() {
                 <tr>
                   <th
                     scope="row"
-                    className="border-t border-[var(--hairline)] py-4 pr-6 align-top text-[13.5px] font-medium text-chalk"
+                    className="sticky left-0 z-[var(--z-raised)] border-t border-[var(--hairline)] bg-ink-950 py-4 pr-6 align-top text-[13.5px] font-medium text-chalk"
                   >
                     Deposit held
                     <span className="mt-1 block text-[12px] font-normal leading-snug text-slate-dim">
@@ -177,7 +185,7 @@ export function Protection() {
                     <th
                       scope="row"
                       className={cn(
-                        'py-3 pr-6 align-top text-[13px] font-normal text-mist',
+                        'sticky left-0 z-[var(--z-raised)] bg-ink-950 py-3 pr-6 align-top text-[13px] font-normal text-mist',
                         index === 0
                           ? 'border-t border-[var(--hairline-strong)]'
                           : 'border-t border-[var(--hairline)]',

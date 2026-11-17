@@ -36,6 +36,14 @@ interface Profile {
 }
 
 const PROFILES: Record<BodyStyle, Profile> = {
+  CITY: {
+    body: [
+      [1.58, 0.32], [1.64, 0.52], [1.62, 0.68], [1.46, 0.78], [1.14, 0.84],
+      [0.80, 0.88], [-0.86, 0.91], [-1.34, 0.90], [-1.54, 0.82], [-1.60, 0.58], [-1.60, 0.32],
+    ],
+    glass: [[0.84, 0.85], [0.44, 1.26], [-0.46, 1.32], [-1.00, 1.04], [-0.98, 0.85]],
+    width: 1.62, glassWidth: 1.44, wheelRadius: 0.30, wheelBase: 1.08, track: 0.90, rideHeight: 0.32,
+  },
   HATCH: {
     body: [
       [1.94, 0.30], [2.00, 0.50], [1.98, 0.66], [1.80, 0.74], [1.42, 0.79],
@@ -336,7 +344,7 @@ export function CarModel({
           <cylinderGeometry
             args={[profile.wheelRadius * 1.26, profile.wheelRadius * 1.26, 0.04, 28]}
           />
-          <meshStandardMaterial color="#05060a" roughness={1} metalness={0} />
+          <meshStandardMaterial color="#070809" roughness={1} metalness={0} />
         </mesh>
       ))}
 

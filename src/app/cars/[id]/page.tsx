@@ -162,20 +162,25 @@ export default async function CarPage({
               />
 
               {/* Specs */}
-              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {specs.map((spec) => {
+              <ul className="mt-6 grid grid-cols-2 border-y border-[var(--hairline)] sm:grid-cols-4">
+                {specs.map((spec, index) => {
                   const Icon = spec.icon;
                   return (
-                    <div
+                    <li
                       key={spec.label}
-                      className="surface rounded-xs px-4 py-3.5"
+                      className={
+                        'flex items-center gap-2.5 py-4 ' +
+                        (index % 2 === 1 ? 'pl-4 ' : '') +
+                        (index > 0 ? 'border-l border-[var(--hairline)] pl-4 ' : '') +
+                        (index === 2 ? 'border-l-0 pl-0 sm:border-l sm:pl-4 ' : '')
+                      }
                     >
-                      <Icon size={15} className="text-amber-400" />
-                      <p className="mt-2 text-[12.5px] text-chalk">{spec.label}</p>
-                    </div>
+                      <Icon size={15} className="shrink-0 text-amber-400" />
+                      <span className="text-[13px] text-chalk">{spec.label}</span>
+                    </li>
                   );
                 })}
-              </div>
+              </ul>
 
               {/* Description */}
               <section className="mt-10">

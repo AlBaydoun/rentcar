@@ -105,7 +105,7 @@ export function HeroScene({ bodyStyle = 'SEDAN', colour = '#ffa62b', className }
         {!reduced && <Motes />}
       </group>
 
-      <fog attach="fog" args={['#06070a', 18, 42]} />
+      <fog attach="fog" args={['#080a0e', 16, 38]} />
     </SceneCanvas>
   );
 }

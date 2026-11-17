@@ -177,7 +177,7 @@ const ROWS: Row[] = [
 
 export function Markets() {
   return (
-    <section className="relative py-24 sm:py-32">
+    <section className="relative py-28 sm:py-36">
       <Container>
         <Reveal>
           <SectionHeading

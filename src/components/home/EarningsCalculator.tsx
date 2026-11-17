@@ -89,7 +89,7 @@ export function EarningsCalculator() {
   }, [country, countryCode, category.value, effectiveRate, daysPerMonth]);
 
   return (
-    <section id="earnings" className="relative py-28 sm:py-32">
+    <section id="earnings" className="relative py-24 sm:py-28">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center">
           <Reveal>

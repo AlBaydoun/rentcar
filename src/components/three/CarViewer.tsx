@@ -77,7 +77,7 @@ export function CarViewer({
           <ReflectiveFloor />
         </group>
 
-        <fog attach="fog" args={['#0a0c11', 16, 34]} />
+        <fog attach="fog" args={['#0f1115', 13, 30]} />
 
         <OrbitControls
           enablePan={false}

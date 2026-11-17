@@ -105,8 +105,8 @@ export async function DashboardShell({
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[228px_minmax(0,1fr)]">
-        <nav className="lg:sticky lg:top-24 lg:self-start">
+      <div className="mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[228px_minmax(0,1fr)]">
+        <nav className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <ul className="flex gap-1 overflow-x-auto no-scrollbar lg:flex-col">
             {links.map((link) => {
               const Icon = link.icon;

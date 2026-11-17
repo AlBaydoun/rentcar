@@ -246,13 +246,13 @@ export function BookingPanel({
       {extras.length > 0 ? (
         <div className="mt-6">
           <p className="mb-2.5 record text-[11px] text-slate-dim">Extras</p>
-          <div className="space-y-1.5">
+          <div className="divide-y divide-[var(--hairline)] border-y border-[var(--hairline)]">
             {extras.slice(0, 5).map((extra) => {
               const quantity = selected[extra.code] ?? 0;
               return (
                 <label
                   key={extra.code}
-                  className="flex cursor-pointer items-center justify-between gap-3 rounded-xs border border-white/[0.07] px-3 py-2.5 transition-colors hover:border-white/20"
+                  className="flex cursor-pointer items-center justify-between gap-3 py-2.5 transition-colors hover:text-chalk"
                 >
                   <span className="min-w-0">
                     <span className="block truncate text-[12.5px] text-chalk">{extra.label}</span>

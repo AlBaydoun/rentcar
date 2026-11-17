@@ -69,7 +69,7 @@ export function Hero() {
 
       {/* Vignette so type stays legible over the scene */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,7,10,0.92)_2%,transparent_38%)] lg:bg-[linear-gradient(to_right,rgba(6,7,10,0.9)_18%,transparent_62%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(8,10,14,0.96)_2%,transparent_38%)] lg:bg-[linear-gradient(to_right,rgba(8,10,14,0.94)_18%,transparent_62%)]"
         aria-hidden
       />
 
@@ -193,7 +193,7 @@ export function Hero() {
             <Magnetic>
               <button
                 type="submit"
-                className="group flex h-full w-full items-center justify-center gap-2 rounded-xs bg-amber-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-[0_1px_0_0_rgba(255,255,255,0.35)_inset,0_12px_32px_-12px_rgba(255,166,43,0.8)] transition-[filter,transform] hover:brightness-110"
+                className="group flex h-full w-full items-center justify-center gap-2 rounded-xs bg-amber-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-[0_1px_0_0_oklch(1 0 0 / 0.4)_inset,0_12px_32px_-12px_rgba(255,166,43,0.8)] transition-[filter,transform] hover:brightness-110"
               >
                 Search
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />

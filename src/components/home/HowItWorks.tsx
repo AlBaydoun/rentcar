@@ -37,7 +37,7 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how" className="relative py-24 sm:py-32">
+    <section id="how" className="relative pt-24 pb-16 sm:pt-28 sm:pb-20">
       <Container>
         <Reveal>
           <SectionHeading

@@ -29,7 +29,7 @@ export function HostHero({ startHref = '/signup' }: { startHref?: string }) {
       </motion.div>
 
       <div
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,7,10,0.92)_2%,transparent_38%)] lg:bg-[linear-gradient(to_left,rgba(6,7,10,0.9)_18%,transparent_62%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(8,10,14,0.96)_2%,transparent_38%)] lg:bg-[linear-gradient(to_left,rgba(8,10,14,0.94)_18%,transparent_62%)]"
         aria-hidden
       />
 
