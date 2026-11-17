@@ -1,21 +1,25 @@
 'use client';
 
 import { Container } from '@/components/ui';
-import { Counter, Reveal } from '@/components/motion/primitives';
+import { Reveal } from '@/components/motion/primitives';
 
 /**
- * A marquee of the market facts that actually differ between the two
- * countries, plus the four numbers that describe the marketplace.
+ * The band under the hero.
+ *
+ * Deliberately not a row of big numbers. A marketplace this size has small
+ * numbers, and a hero metric reading "20 cars" argues against itself — the
+ * honest version states the inventory plainly in a line and spends the space
+ * on the specific commitments that actually distinguish the product.
  */
 
-const FACTS = [
-  'Kfz-Haftpflichtversicherung included on every German listing',
-  'Whish and OMT payouts in Lebanon',
-  'Winter tyres checked from October to April',
+const COMMITMENTS = [
   'Nothing charged until the owner approves',
+  'Card captured at handover, never before',
+  'Kfz-Haftpflichtversicherung on every German listing',
+  'Whish and OMT payouts in Lebanon',
   'Mécanique certificate verified on every Lebanese car',
+  'Winter tyres checked from October to April',
   'Exact address revealed only on confirmation',
-  'Card authorised at approval, captured at handover',
   'Every risk factor shown to the owner with its reason',
 ];
 
@@ -25,44 +29,41 @@ export function TrustStrip({
   stats: { cars: number; cities: number; owners: number };
 }) {
   return (
-    <section className="relative border-y border-white/[0.06] py-14">
+    <section className="relative border-y border-[var(--hairline)] py-10">
       <Container>
         <Reveal>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { value: stats.cars, label: 'Cars listed', suffix: '', sub: 'Across both markets' },
-              { value: stats.cities, label: 'Cities', suffix: '', sub: 'Germany and Lebanon' },
-              { value: stats.owners, label: 'Verified owners', suffix: '', sub: 'Identity checked' },
-              { value: 0, label: 'Charged before approval', suffix: '', sub: 'By design, not by policy' },
-            ].map((stat, index) => (
-              <div key={stat.label}>
-                <div className="numeric text-[clamp(2rem,4vw,2.9rem)] font-bold leading-none text-chalk">
-                  <Counter to={stat.value} duration={1.4 + index * 0.15} />
-                  {stat.suffix}
-                </div>
-                <p className="mt-2.5 text-[13px] font-medium text-chalk">{stat.label}</p>
-                <p className="mt-1 text-[12px] text-slate-dim">{stat.sub}</p>
-              </div>
-            ))}
-          </div>
+          <p className="lede text-[14px] leading-relaxed text-mist">
+            <span className="numeric text-chalk">{stats.cars}</span> cars across{' '}
+            <span className="numeric text-chalk">{stats.cities}</span> cities in Germany and
+            Lebanon, listed by <span className="numeric text-chalk">{stats.owners}</span> verified
+            owners. Small, and every one of them checked.
+          </p>
         </Reveal>
       </Container>
 
-      <div className="relative mt-12 overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-ink-950 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-ink-950 to-transparent" />
-        <div className="flex w-max animate-marquee gap-10">
-          {[...FACTS, ...FACTS].map((fact, index) => (
+      {/* The commitments, running quietly past. */}
+      <div className="relative mt-8 overflow-hidden" aria-hidden>
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-[var(--z-raised)] w-24 bg-gradient-to-r from-ink-950 via-ink-950/80 to-transparent sm:w-36" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-raised)] w-24 bg-gradient-to-l from-ink-950 via-ink-950/80 to-transparent sm:w-36" />
+        <div className="flex w-max animate-marquee">
+          {[...COMMITMENTS, ...COMMITMENTS].map((fact, index) => (
             <span
               key={index}
-              className="flex shrink-0 items-center gap-10 whitespace-nowrap text-[12.5px] text-slate-dim"
+              className="flex shrink-0 items-center gap-10 whitespace-nowrap pr-10 text-[12.5px] text-slate-dim"
             >
               {fact}
-              <span className="h-1 w-1 rounded-full bg-amber-500/50" aria-hidden />
+              <span className="h-1 w-1 rounded-full bg-amber-500/60" />
             </span>
           ))}
         </div>
       </div>
+
+      {/* The same commitments, reachable by anyone not watching them scroll. */}
+      <ul className="sr-only">
+        {COMMITMENTS.map((fact) => (
+          <li key={fact}>{fact}</li>
+        ))}
+      </ul>
     </section>
   );
 }

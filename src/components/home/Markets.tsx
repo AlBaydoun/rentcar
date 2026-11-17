@@ -27,15 +27,32 @@ const ACCENT = {
   cedar: { text: 'text-cedar-400', rule: 'bg-cedar-500/50', bar: 'bg-cedar-500' },
 } as const;
 
+/**
+ * The strongest multiplier anywhere in the month.
+ *
+ * Sampling a single day misses windows that straddle a month boundary — the
+ * Christmas peak runs 18 December to 6 January and would never show up.
+ */
 function seasonMultiplier(country: CountryConfig, month: number): number {
-  const value = (month + 1) * 100 + 15;
-  return (
-    country.seasons.find((season) => {
+  let strongest = 1;
+  for (const day of [3, 10, 17, 24, 28]) {
+    const value = (month + 1) * 100 + day;
+    for (const season of country.seasons) {
       const from = season.fromMonth * 100 + season.fromDay;
       const to = season.toMonth * 100 + season.toDay;
-      return from <= to ? value >= from && value <= to : value >= from || value <= to;
-    })?.multiplier ?? 1
-  );
+      const inside = from <= to ? value >= from && value <= to : value >= from || value <= to;
+      if (inside && Math.abs(season.multiplier - 1) > Math.abs(strongest - 1)) {
+        strongest = season.multiplier;
+      }
+    }
+  }
+  return strongest;
+}
+
+/** "a, b and c" — proper nouns in the season labels keep their casing. */
+function listSentence(parts: string[]): string {
+  if (parts.length <= 1) return parts[0] ?? '';
+  return `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
 }
 
 interface Row {
@@ -296,11 +313,12 @@ export function Markets() {
                         <span>Dec</span>
                       </p>
                       <p className="mt-2 text-[12.5px] leading-relaxed text-mist">
-                        Peaks in{' '}
-                        {config.seasons
-                          .filter((season) => season.multiplier > 1.1)
-                          .map((season) => season.label.toLowerCase())
-                          .join(' and ')}
+                        Peaks over{' '}
+                        {listSentence(
+                          config.seasons
+                            .filter((season) => season.multiplier > 1.1)
+                            .map((season) => season.label),
+                        )}
                         .
                       </p>
                     </td>
