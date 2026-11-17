@@ -121,7 +121,7 @@ export function EventLog({
                 {entry.actorRole.toLowerCase()}
               </p>
               {entry.note ? (
-                <p className="mt-1.5 rounded-xs border border-white/[0.07] bg-white/[0.02] px-3 py-2 text-[12px] leading-relaxed text-mist">
+                <p className="mt-1.5 inset-note px-3 py-2 text-[12px] leading-relaxed text-mist">
                   {entry.note}
                 </p>
               ) : null}

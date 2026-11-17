@@ -125,7 +125,7 @@ export function RiskBreakdown({ risk }: { risk: RiskAssessment }) {
       ) : null}
 
       {risk.suggestedConditions.length > 0 ? (
-        <div className="mt-5 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
+        <div className="mt-5 inset-note p-4">
           <p className="record text-[11px] text-slate-dim">
             Before you approve, you could
           </p>

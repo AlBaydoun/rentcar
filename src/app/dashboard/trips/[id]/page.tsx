@@ -215,7 +215,7 @@ export default async function TripPage({
                 </p>
               </div>
             ) : (
-              <div className="mt-4 flex items-start gap-2.5 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
+              <div className="mt-4 flex items-start gap-2.5 inset-note p-4">
                 <Info size={15} className="mt-px shrink-0 text-slate-dim" />
                 <p className="text-[13px] leading-relaxed text-mist">
                   The area is <span className="text-chalk">{booking.vehicle.city}</span>. The exact

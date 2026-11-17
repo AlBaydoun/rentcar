@@ -417,7 +417,7 @@ export function ListingWizard({ defaultCountry }: { defaultCountry: CountryCode 
                     />
                   </Field>
 
-                  <div className="mt-6 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
+                  <div className="mt-6 inset-note p-4">
                     <p className="text-[12.5px] font-medium text-chalk">
                       To list in {country.name} you will need
                     </p>
@@ -732,7 +732,7 @@ export function ListingWizard({ defaultCountry }: { defaultCountry: CountryCode 
                     />
                   </Field>
 
-                  <div className="mt-6 flex items-start gap-2.5 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
+                  <div className="mt-6 flex items-start gap-2.5 inset-note p-4">
                     <Sparkles size={15} className="mt-px shrink-0 text-amber-400" />
                     <p className="text-[12.5px] leading-relaxed text-mist">
                       Saving creates the listing in{' '}

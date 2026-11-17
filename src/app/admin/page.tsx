@@ -61,15 +61,25 @@ export default async function AdminPage() {
       <Container className="py-10">
         <h1 className="display text-2xl text-chalk">Operations</h1>
 
+        {/* Three of these are inventory; one is a queue someone has to clear.
+            Only the actionable one is tinted, so the eye lands on it first. */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { label: 'Accounts', value: users },
-            { label: 'Cars listed', value: listed },
-            { label: 'Bookings', value: bookings },
-            { label: 'Awaiting owner', value: awaiting },
+            { label: 'Accounts', value: users, acts: false },
+            { label: 'Cars listed', value: listed, acts: false },
+            { label: 'Bookings', value: bookings, acts: false },
+            { label: 'Awaiting owner', value: awaiting, acts: awaiting > 0 },
           ].map((stat) => (
             <Card key={stat.label} className="p-5">
-              <p className="numeric text-2xl font-bold text-chalk">{stat.value}</p>
+              <p
+                className={
+                  stat.acts
+                    ? 'numeric text-2xl font-bold text-amber-400'
+                    : 'numeric text-2xl font-bold text-chalk'
+                }
+              >
+                {stat.value}
+              </p>
               <p className="mt-1 text-[12px] text-slate-dim">{stat.label}</p>
             </Card>
           ))}
@@ -194,7 +204,7 @@ export default async function AdminPage() {
                   <th className="pb-3 pr-4 font-medium">Renter</th>
                   <th className="pb-3 pr-4 font-medium">Car</th>
                   <th className="pb-3 pr-4 font-medium">Status</th>
-                  <th className="pb-3 pr-4 font-medium">Risk</th>
+                  <th className="pb-3 pr-4 font-medium">Risk /100</th>
                   <th className="pb-3 text-right font-medium">Total</th>
                 </tr>
               </thead>

@@ -143,15 +143,26 @@ body {
 .record {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Figures run tight so a column of them reads as one block.
+ *
+ * No zero-shape rule here: JetBrains Mono carries the centre dot in the
+ * default glyph and exposes no feature that removes it — "zero", every
+ * stylistic set ss01-ss20, all render identically. A rule pretending
+ * otherwise would be dead code.
+ */
+.numeric {
   letter-spacing: -0.02em;
 }
 
 /*
- * A slashed zero earns its place in a reference number or a plate, where an
- * O/0 mix-up matters. On a price or a score it just looks like a glyph bug.
+ * Record labels are only ever set small (10-12px). Mono at that size wants
+ * air, not tightening; the shared -0.02em was closing up the counters.
  */
-.numeric {
-  font-feature-settings: "zero" 0;
+.record {
+  letter-spacing: 0.02em;
 }
 
 .lede {
@@ -178,6 +189,18 @@ body {
 .surface-sunken {
   background: oklch(0.125 0.007 262);
   border: 1px solid var(--hairline);
+}
+
+/*
+ * A note set *into* a surface rather than stacked on top of one.
+ *
+ * A bordered box inside a bordered card is the nested-card tell. Recessing it
+ * instead — down to the page colour, no border at all — reads as a window cut
+ * through the card, which is what these notes actually are.
+ */
+.inset-note {
+  background: var(--color-ink-950);
+  border-radius: var(--radius-xs);
 }
 
 /*

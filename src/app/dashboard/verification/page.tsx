@@ -111,8 +111,10 @@ export default async function VerificationPage() {
 
             return (
               <li key={type}>
-                <Card className="flex flex-wrap items-start justify-between gap-4 p-5">
-                  <div className="min-w-0 flex-1">
+                {/* The provenance sits opposite the name, so the row reads as a
+                    record across the width rather than a blob hugging the left. */}
+                <Card className="flex flex-wrap items-start justify-between gap-x-8 gap-y-2 p-5">
+                  <div className="min-w-0 max-w-[62ch] flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-[14px] font-medium text-chalk">
                         {DOCUMENT_LABELS[type]}
@@ -125,17 +127,17 @@ export default async function VerificationPage() {
                     <p className="mt-1.5 text-[12.5px] leading-relaxed text-slate-dim">
                       {doc?.rejectionReason ?? DOCUMENT_HINTS[type]}
                     </p>
-                    {doc?.expiresAt ? (
-                      <p className="numeric mt-2 text-[11.5px] text-slate-dim">
-                        Issued in {doc.issuingCountry} · valid to{' '}
-                        {doc.expiresAt.toLocaleDateString('en-GB', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric',
-                        })}
-                      </p>
-                    ) : null}
                   </div>
+                  {doc?.expiresAt ? (
+                    <p className="numeric shrink-0 text-[11.5px] text-slate-dim">
+                      Issued in {doc.issuingCountry} · valid to{' '}
+                      {doc.expiresAt.toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </p>
+                  ) : null}
                 </Card>
               </li>
             );

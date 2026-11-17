@@ -179,7 +179,7 @@ export default async function OwnerBookingPage({
             </div>
 
             {booking.renterMessage ? (
-              <div className="mt-6 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
+              <div className="mt-6 inset-note p-4">
                 <p className="record text-[11px] text-slate-dim">
                   What they said
                 </p>

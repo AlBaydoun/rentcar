@@ -299,7 +299,7 @@ export default async function CarPage({
                   })}
                 </div>
 
-                <div className="mt-4 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
+                <div className="mt-4 inset-note p-4">
                   <p className="text-[12.5px] font-medium text-chalk">
                     Distance: {vehicle.includedKmPerDay} km per day included
                   </p>
