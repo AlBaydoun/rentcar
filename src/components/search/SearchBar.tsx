@@ -39,7 +39,7 @@ export function SearchBar() {
   return (
     <form
       onSubmit={submit}
-      className="panel panel-lit grid gap-2 rounded-lg p-2 sm:grid-cols-[1.4fr_1fr_1fr_auto]"
+      className="surface grid gap-2 rounded-lg p-2 sm:grid-cols-[1.4fr_1fr_1fr_auto]"
     >
       <label className="flex items-center gap-2.5 rounded-xs px-3 py-2.5 focus-within:bg-white/[0.05]">
         <MapPin size={15} className="shrink-0 text-amber-400" />
@@ -84,7 +84,7 @@ export function SearchBar() {
 
       <button
         type="submit"
-        className="flex items-center justify-center gap-2 rounded-xs bg-gradient-to-b from-amber-400 to-amber-600 px-6 py-3 text-sm font-semibold text-ink-950 transition-[filter] hover:brightness-110"
+        className="flex items-center justify-center gap-2 rounded-xs bg-amber-500 px-6 py-3 text-sm font-semibold text-ink-950 transition-[filter] hover:brightness-110"
       >
         <Search size={15} />
         Search

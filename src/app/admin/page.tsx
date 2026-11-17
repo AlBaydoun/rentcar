@@ -189,7 +189,7 @@ export default async function AdminPage() {
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[720px] text-left">
               <thead>
-                <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-wider text-slate-dim">
+                <tr className="border-b border-white/[0.07] record text-[11px] text-slate-dim">
                   <th className="pb-3 pr-4 font-medium">Reference</th>
                   <th className="pb-3 pr-4 font-medium">Renter</th>
                   <th className="pb-3 pr-4 font-medium">Car</th>

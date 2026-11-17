@@ -47,7 +47,7 @@ export default async function TripsPage() {
       <li>
         <Link
           href={`/dashboard/trips/${booking.id}`}
-          className="panel block rounded-lg p-5 transition-colors hover:border-white/20"
+          className="surface block rounded-lg p-5 transition-colors hover:border-white/20"
         >
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
@@ -109,7 +109,7 @@ export default async function TripsPage() {
 
       {live.length > 0 ? (
         <section className="mt-8">
-          <h2 className="mb-3 text-[11px] uppercase tracking-[0.18em] text-amber-400">
+          <h2 className="mb-3 record text-[11px] text-amber-400">
             In progress
           </h2>
           <ul className="space-y-3">
@@ -122,7 +122,7 @@ export default async function TripsPage() {
 
       {past.length > 0 ? (
         <section className="mt-10">
-          <h2 className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Past</h2>
+          <h2 className="mb-3 record text-[11px] text-slate-dim">Past</h2>
           <ul className="space-y-3 opacity-75">
             {past.map((booking) => (
               <Row key={booking.id} booking={booking} />

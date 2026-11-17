@@ -9,7 +9,7 @@ export function ClosingCta() {
     <section className="relative py-28 sm:py-36">
       <Container>
         <Reveal>
-          <div className="panel panel-lit relative overflow-hidden rounded-2xl px-8 py-16 text-center sm:px-16 sm:py-24">
+          <div className="surface relative overflow-hidden rounded-2xl px-8 py-16 text-center sm:px-16 sm:py-24">
             <div
               className="pointer-events-none absolute inset-x-0 -top-40 h-80 bg-[radial-gradient(50%_60%_at_50%_50%,rgba(255,166,43,0.22),transparent_70%)]"
               aria-hidden
@@ -19,10 +19,9 @@ export function ClosingCta() {
               aria-hidden
             />
 
-            <h2 className="display relative mx-auto max-w-3xl text-[clamp(2.1rem,5.4vw,3.8rem)] text-gradient">
-              Somebody near you has a car
-              <br />
-              <span className="amber-gradient">doing nothing this weekend.</span>
+            <h2 className="display relative mx-auto max-w-3xl text-[clamp(2.1rem,5.4vw,3.8rem)]">
+              Somebody near you has a car{' '}
+              <span className="text-amber-400">doing nothing this weekend.</span>
             </h2>
 
             <p className="relative mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-mist">

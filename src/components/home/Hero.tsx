@@ -86,13 +86,13 @@ export function Hero() {
             </Badge>
           </motion.div>
 
-          <h1 className="display mt-6 text-[clamp(2.5rem,5.6vw,4.4rem)]">
-            <span className="block text-gradient">
-              <SplitText text="Rent a car from" />
-            </span>
-            <span className="block">
-              <SplitText text="someone who owns one." delay={0.18} wordClassName="amber-gradient" />
-            </span>
+          {/*
+            Emphasis sits on the three words that are the whole proposition —
+            not on half the headline, which just reads as decoration.
+          */}
+          <h1 className="display mt-6 max-w-[14ch] text-[clamp(2.4rem,5vw,4rem)]">
+            <SplitText text="Rent a car from someone who" />{' '}
+            <SplitText text="owns one." delay={0.3} wordClassName="text-amber-400" />
           </h1>
 
           <motion.p
@@ -129,7 +129,7 @@ export function Hero() {
                 {marketIndex === index && (
                   <motion.span
                     layoutId="market-pill"
-                    className="absolute inset-0 rounded-[10px] bg-gradient-to-b from-amber-400 to-amber-600"
+                    className="absolute inset-0 rounded-[10px] bg-amber-500"
                     transition={{ type: 'spring', stiffness: 400, damping: 34 }}
                   />
                 )}
@@ -147,7 +147,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="panel panel-lit mt-5 grid gap-2 rounded-lg p-2 sm:grid-cols-[1.3fr_1fr_1fr_auto]"
+            className="surface mt-5 grid gap-2 rounded-lg p-2 sm:grid-cols-[1.3fr_1fr_1fr_auto]"
           >
             <label className="flex items-center gap-2.5 rounded-xs px-3 py-2.5 transition-colors focus-within:bg-white/[0.05]">
               <MapPin size={15} className="shrink-0 text-amber-400" />
@@ -156,7 +156,7 @@ export function Hero() {
                 list="hero-cities"
                 value={city}
                 onChange={(event) => setCity(event.target.value)}
-                placeholder={`Where in ${market.config.name}?`}
+                placeholder="City or airport"
                 className="w-full bg-transparent text-sm text-chalk placeholder:text-slate-dim focus:outline-none"
               />
               <datalist id="hero-cities">
@@ -193,7 +193,7 @@ export function Hero() {
             <Magnetic>
               <button
                 type="submit"
-                className="group flex h-full w-full items-center justify-center gap-2 rounded-xs bg-gradient-to-b from-amber-400 to-amber-600 px-6 py-3 text-sm font-semibold text-ink-950 shadow-[0_1px_0_0_rgba(255,255,255,0.35)_inset,0_12px_32px_-12px_rgba(255,166,43,0.8)] transition-[filter,transform] hover:brightness-110"
+                className="group flex h-full w-full items-center justify-center gap-2 rounded-xs bg-amber-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-[0_1px_0_0_rgba(255,255,255,0.35)_inset,0_12px_32px_-12px_rgba(255,166,43,0.8)] transition-[filter,transform] hover:brightness-110"
               >
                 Search
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
@@ -221,20 +221,6 @@ export function Hero() {
               Priced in <span className="numeric text-chalk">{market.config.currency}</span>
             </span>
           </motion.div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 1 }}
-          className="pointer-events-none absolute -bottom-16 left-0 hidden flex-col items-start gap-2 lg:flex"
-        >
-          <span className="text-[10px] uppercase tracking-[0.25em] text-slate-dim">Scroll</span>
-          <motion.span
-            animate={{ y: [0, 7, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            className="h-8 w-px bg-gradient-to-b from-amber-500 to-transparent"
-          />
         </motion.div>
       </Container>
     </section>

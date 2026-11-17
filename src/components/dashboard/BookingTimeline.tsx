@@ -13,7 +13,7 @@ export function BookingTimeline({ status }: { status: string }) {
   const terminated = isTerminal(current) && current !== 'COMPLETED';
 
   return (
-    <div className="panel rounded-lg p-5">
+    <div className="surface rounded-lg p-5">
       <ol className="flex items-center gap-1">
         {HAPPY_PATH.map((step, stepIndex) => {
           const done = stepIndex < index;
@@ -79,7 +79,7 @@ export function EventLog({
   if (events.length === 0) return null;
 
   return (
-    <div className="panel rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       <h2 className="text-[15px] font-semibold text-chalk">Audit trail</h2>
       <p className="mt-1 text-[12.5px] text-slate-dim">
         Every state change, with the effects the engine ran.

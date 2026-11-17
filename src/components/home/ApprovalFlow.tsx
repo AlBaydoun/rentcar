@@ -151,12 +151,10 @@ export function ApprovalFlow() {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="The part that matters"
             title={
               <>
-                The owner decides.
-                <br />
-                <span className="amber-gradient">Money waits for them.</span>
+                The owner decides.{' '}
+                <span className="text-amber-400">Money waits for them.</span>
               </>
             }
             description="Most rental platforms take your money and sort out the details afterwards. Here the sequence runs the other way, and every step below is a real, guarded transition in the booking engine."
@@ -182,7 +180,7 @@ export function ApprovalFlow() {
                   aria-current={active}
                   className={cn(
                     'group relative flex w-full items-center gap-3.5 overflow-hidden rounded-md px-3.5 py-3 text-left transition-colors',
-                    active ? 'panel' : 'hover:bg-white/[0.035]',
+                    active ? 'surface' : 'hover:bg-white/[0.035]',
                   )}
                 >
                   {/* Progress fill on the active step */}
@@ -218,7 +216,7 @@ export function ApprovalFlow() {
                     >
                       {entry.label}
                     </span>
-                    <span className="numeric mt-0.5 block truncate text-[10.5px] uppercase tracking-wider text-slate-dim">
+                    <span className="numeric mt-0.5 block truncate record text-[11px] text-slate-dim">
                       {entry.status}
                     </span>
                   </span>
@@ -252,7 +250,7 @@ export function ApprovalFlow() {
             </div>
           </div>
 
-          {/* Detail panel */}
+          {/* Detail surface */}
           <div className="relative min-h-[340px]">
             <AnimatePresence mode="wait">
               <motion.div
@@ -261,7 +259,7 @@ export function ApprovalFlow() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -14 }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="panel panel-lit h-full rounded-xl p-7 sm:p-9"
+                className="surface h-full rounded-xl p-7 sm:p-9"
               >
                 <div className="flex items-center justify-between gap-4">
                   <Badge tone={step.tone === 'neutral' ? 'neutral' : step.tone}>
@@ -282,7 +280,7 @@ export function ApprovalFlow() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-[10.5px] uppercase tracking-[0.18em] text-slate-dim">
+                    <p className="record text-[11px] text-slate-dim">
                       Money position
                     </p>
                     <p
@@ -297,7 +295,7 @@ export function ApprovalFlow() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10.5px] uppercase tracking-[0.18em] text-slate-dim">
+                    <p className="record text-[11px] text-slate-dim">
                       Calendar
                     </p>
                     <p className="mt-1.5 text-sm font-medium text-chalk">
@@ -315,7 +313,7 @@ export function ApprovalFlow() {
                     transition={{ delay: 0.25 }}
                     className="mt-7 rounded-md border border-white/10 bg-ink-950/50 p-4"
                   >
-                    <p className="mb-3 text-[10.5px] uppercase tracking-[0.18em] text-slate-dim">
+                    <p className="mb-3 record text-[11px] text-slate-dim">
                       What the owner sees
                     </p>
                     <div className="space-y-2">

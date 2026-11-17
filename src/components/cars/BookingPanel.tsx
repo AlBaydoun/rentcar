@@ -19,7 +19,7 @@ import type { Currency, ExtraCode, InsuranceTier } from '@/lib/domain/types';
 import { cn } from '@/lib/cn';
 
 /**
- * The booking panel.
+ * The booking surface.
  *
  * It re-prices through /api/quote on every change rather than doing any
  * arithmetic of its own, so the total on screen is always what the pricing
@@ -164,7 +164,7 @@ export function BookingPanel({
     (!data?.eligibility || data.eligibility.eligible);
 
   return (
-    <div className="panel panel-lit rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       {/* Headline price */}
       <div className="flex items-baseline justify-between gap-3">
         <div>
@@ -179,7 +179,7 @@ export function BookingPanel({
       {/* Dates */}
       <div className="mt-5 grid grid-cols-2 gap-2">
         <label className="rounded-xs border border-white/10 bg-ink-900/60 px-3 py-2.5 focus-within:border-amber-500/50">
-          <span className="block text-[10.5px] uppercase tracking-wider text-slate-dim">Pickup</span>
+          <span className="block record text-[11px] text-slate-dim">Pickup</span>
           <input
             type="date"
             value={start}
@@ -189,7 +189,7 @@ export function BookingPanel({
           />
         </label>
         <label className="rounded-xs border border-white/10 bg-ink-900/60 px-3 py-2.5 focus-within:border-amber-500/50">
-          <span className="block text-[10.5px] uppercase tracking-wider text-slate-dim">Return</span>
+          <span className="block record text-[11px] text-slate-dim">Return</span>
           <input
             type="date"
             value={end}
@@ -207,7 +207,7 @@ export function BookingPanel({
 
       {/* Protection */}
       <div className="mt-6">
-        <p className="mb-2.5 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Protection</p>
+        <p className="mb-2.5 record text-[11px] text-slate-dim">Protection</p>
         <div className="grid grid-cols-3 gap-1.5">
           {(['BASIC', 'PLUS', 'MAX'] as InsuranceTier[]).map((entry) => (
             <button
@@ -245,7 +245,7 @@ export function BookingPanel({
       {/* Extras */}
       {extras.length > 0 ? (
         <div className="mt-6">
-          <p className="mb-2.5 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Extras</p>
+          <p className="mb-2.5 record text-[11px] text-slate-dim">Extras</p>
           <div className="space-y-1.5">
             {extras.slice(0, 5).map((extra) => {
               const quantity = selected[extra.code] ?? 0;

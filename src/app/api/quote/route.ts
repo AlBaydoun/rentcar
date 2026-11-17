@@ -7,9 +7,9 @@ import { quoteSchema } from '@/lib/validation';
 import type { InsuranceTier } from '@/lib/domain/types';
 
 /**
- * Live quoting for the booking panel.
+ * Live quoting for the booking surface.
  *
- * The panel re-prices on every change — dates, protection tier, extras — and
+ * The surface re-prices on every change — dates, protection tier, extras — and
  * this is the same code path `createBookingRequest` uses, so the figure on
  * screen is the figure that gets persisted.
  */

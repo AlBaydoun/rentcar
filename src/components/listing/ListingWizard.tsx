@@ -509,7 +509,7 @@ export function ListingWizard({ defaultCountry }: { defaultCountry: CountryCode 
                   <div className="mt-6 grid gap-5 sm:grid-cols-2">
                     <div>
                       <div className="mb-2 flex items-baseline justify-between">
-                        <span className="text-[12px] font-medium uppercase tracking-wider text-mist">
+                        <span className="record text-[11px] text-mist">
                           Weekly discount
                         </span>
                         <span className="numeric text-[13px] text-chalk">
@@ -528,7 +528,7 @@ export function ListingWizard({ defaultCountry }: { defaultCountry: CountryCode 
                     </div>
                     <div>
                       <div className="mb-2 flex items-baseline justify-between">
-                        <span className="text-[12px] font-medium uppercase tracking-wider text-mist">
+                        <span className="record text-[11px] text-mist">
                           Monthly discount
                         </span>
                         <span className="numeric text-[13px] text-chalk">

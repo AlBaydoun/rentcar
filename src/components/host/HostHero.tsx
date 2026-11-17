@@ -44,11 +44,11 @@ export function HostHero({ startHref = '/signup' }: { startHref?: string }) {
           </motion.div>
 
           <h1 className="display mt-6 text-[clamp(2.4rem,5.4vw,4.2rem)]">
-            <span className="block text-gradient">
+            <span className="block">
               <SplitText text="Your car is idle" />
             </span>
             <span className="block">
-              <SplitText text="96% of the time." delay={0.16} wordClassName="amber-gradient" />
+              <SplitText text="96% of the time." delay={0.16} wordClassName="text-amber-400" />
             </span>
           </h1>
 

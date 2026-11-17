@@ -9,10 +9,10 @@ export default function NotFound() {
         <Link href="/" className="inline-block">
           <Wordmark />
         </Link>
-        <p className="numeric mt-12 text-[11px] uppercase tracking-[0.25em] text-slate-dim">
+        <p className="numeric mt-12 text-[11px] record text-slate-dim">
           404
         </p>
-        <h1 className="display mt-4 text-[clamp(2rem,5vw,3.4rem)] text-gradient">
+        <h1 className="display mt-4 text-[clamp(2rem,5vw,3.4rem)]">
           That page has been driven away
         </h1>
         <p className="mx-auto mt-4 max-w-md text-[14.5px] leading-relaxed text-mist">

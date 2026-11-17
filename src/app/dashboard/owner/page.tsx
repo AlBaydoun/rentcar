@@ -55,9 +55,9 @@ export default async function OwnerInboxPage() {
       <li>
         <Link
           href={`/dashboard/owner/bookings/${booking.id}`}
-          className="panel group flex flex-wrap items-center gap-4 rounded-lg p-4 transition-colors hover:border-white/20 sm:flex-nowrap"
+          className="surface group flex flex-wrap items-center gap-4 rounded-lg p-4 transition-colors hover:border-white/20 sm:flex-nowrap"
         >
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-[15px] font-bold text-ink-950">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-amber-500 text-[15px] font-bold text-ink-950">
             {booking.renter.fullName.charAt(0)}
           </span>
 
@@ -127,7 +127,7 @@ export default async function OwnerInboxPage() {
 
       {waiting.length > 0 ? (
         <section className="mt-8">
-          <h2 className="mb-3 text-[11px] uppercase tracking-[0.18em] text-amber-400">
+          <h2 className="mb-3 record text-[11px] text-amber-400">
             Waiting on you
           </h2>
           <ul className="space-y-2.5">
@@ -140,7 +140,7 @@ export default async function OwnerInboxPage() {
 
       {upcoming.length > 0 ? (
         <section className="mt-10">
-          <h2 className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+          <h2 className="mb-3 record text-[11px] text-slate-dim">
             Confirmed and in progress
           </h2>
           <ul className="space-y-2.5">
@@ -153,7 +153,7 @@ export default async function OwnerInboxPage() {
 
       {past.length > 0 ? (
         <section className="mt-10">
-          <h2 className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Past</h2>
+          <h2 className="mb-3 record text-[11px] text-slate-dim">Past</h2>
           <ul className="space-y-2.5 opacity-70">
             {past.slice(0, 12).map((booking) => (
               <Row key={booking.id} booking={booking} />

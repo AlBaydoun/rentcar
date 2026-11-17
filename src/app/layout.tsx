@@ -1,10 +1,25 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Sora } from 'next/font/google';
+import { Archivo, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const sora = Sora({ subsets: ['latin'], variable: '--font-sora', display: 'swap', weight: ['400', '600', '700', '800'] });
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono-face', display: 'swap', weight: ['400', '500', '700'] });
+/*
+ * One grotesque, used across its width axis — wide for display, normal for
+ * text — plus a mono that carries record data. Two families on a real
+ * contrast axis rather than two near-identical sans-serifs.
+ */
+const archivo = Archivo({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-archivo',
+  display: 'swap',
+  axes: ['wdth'],
+});
+
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono-face',
+  display: 'swap',
+  weight: ['400', '500', '700'],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -22,17 +37,25 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#06070a',
+  themeColor: '#0a0b10',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sora.variable} ${inter.variable} ${mono.variable}`}>
-      <body className="grain min-h-screen antialiased">
+    <html lang="en" className={`${archivo.variable} ${mono.variable}`}>
+      <head>
+        {/* Without scripts no observer fires, so reveals must not hide content. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
+      <body className="min-h-screen antialiased">
         <div className="ambient-field" aria-hidden />
-        <div className="relative z-[2]">{children}</div>
+        <div className="relative" style={{ zIndex: 'var(--z-raised)' }}>
+          {children}
+        </div>
       </body>
     </html>
   );

@@ -2,7 +2,7 @@
   "name": "karrent",
   "version": "0.1.0",
   "private": true,
-  "description": "KarRent \u2014 peer-to-peer car rental marketplace for Germany and Lebanon",
+  "description": "KarRent — peer-to-peer car rental marketplace for Germany and Lebanon",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
@@ -48,7 +48,7 @@
     "@types/three": "^0.185.4",
     "eslint": "^9.39.5",
     "eslint-config-next": "^15.5.23",
-    "playwright": "^1.62.1",
+    "playwright": "^1.65.1",
     "postcss": "^8.5.26",
     "prisma": "^6.19.3",
     "tailwindcss": "^4.3.3",

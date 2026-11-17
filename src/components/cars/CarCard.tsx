@@ -56,7 +56,7 @@ export function CarCard({
     >
       <Link
         href={href ?? `/cars/${car.id}`}
-        className="panel panel-lit group relative flex h-full flex-col overflow-hidden rounded-lg transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-white/20"
+        className="surface group relative flex h-full flex-col overflow-hidden rounded-lg transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-white/20"
       >
         <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-b from-white/[0.05] to-transparent">
           <div

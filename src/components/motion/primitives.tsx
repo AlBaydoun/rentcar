@@ -34,7 +34,16 @@ export interface RevealProps {
   as?: 'div' | 'section' | 'li' | 'span' | 'article' | 'header';
 }
 
-/** Fades and slides an element in the first time it enters the viewport. */
+/**
+ * Fades and slides an element in the first time it enters the viewport.
+ *
+ * A reveal must never be the reason content is invisible. Two failsafes:
+ * `data-reveal` lets a <noscript> rule force everything visible when scripts
+ * do not run, and a timer reveals regardless if the observer has not fired —
+ * IntersectionObserver is throttled on background tabs and absent in some
+ * headless renderers, and a section that ships blank is worse than one that
+ * simply appears.
+ */
 export function Reveal({
   children,
   className,
@@ -47,22 +56,26 @@ export function Reveal({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once, margin: '-12% 0px -10% 0px' });
   const reduced = useReducedMotion();
+  const [failsafe, setFailsafe] = useState(false);
   const Component = motion[as] as typeof motion.div;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setFailsafe(true), 1600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const axis = direction === 'left' || direction === 'right' ? 'x' : 'y';
   const sign = direction === 'down' || direction === 'right' ? -1 : 1;
+  const shown = reduced || inView || failsafe;
 
   return (
     <Component
       ref={ref}
+      data-reveal=""
       className={className}
       initial={reduced ? false : { opacity: 0, [axis]: distance * sign }}
-      animate={
-        reduced || inView
-          ? { opacity: 1, x: 0, y: 0 }
-          : { opacity: 0, [axis]: distance * sign }
-      }
-      transition={{ duration: 0.72, delay, ease: EASE_OUT_EXPO }}
+      animate={shown ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, [axis]: distance * sign }}
+      transition={{ duration: 0.6, delay, ease: EASE_OUT_EXPO }}
     >
       {children}
     </Component>
@@ -92,14 +105,21 @@ export function Stagger({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once, margin: '-10% 0px' });
   const reduced = useReducedMotion();
+  const [failsafe, setFailsafe] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setFailsafe(true), 1600);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <motion.div
       ref={ref}
+      data-reveal=""
       className={className}
       variants={staggerContainer}
       initial={reduced ? 'show' : 'hidden'}
-      animate={reduced || inView ? 'show' : 'hidden'}
+      animate={reduced || inView || failsafe ? 'show' : 'hidden'}
     >
       {children}
     </motion.div>
@@ -322,7 +342,7 @@ export function ScrollProgress({ className }: { className?: string }) {
   return (
     <motion.div
       className={cn(
-        'fixed inset-x-0 top-0 z-50 h-[2px] origin-left bg-gradient-to-r from-amber-500 via-amber-400 to-cedar-400',
+        'fixed inset-x-0 top-0 z-50 h-[2px] origin-left bg-amber-500',
         className,
       )}
       style={{ scaleX }}

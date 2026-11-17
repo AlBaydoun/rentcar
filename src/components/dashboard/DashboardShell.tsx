@@ -89,7 +89,7 @@ export async function DashboardShell({
           </Link>
           <div className="flex items-center gap-3">
             <span className="hidden text-[13px] text-mist sm:inline">{user.fullName}</span>
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-[13px] font-bold text-ink-950">
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500 text-[13px] font-bold text-ink-950">
               {user.fullName.charAt(0)}
             </span>
             <form action={signOutAction}>

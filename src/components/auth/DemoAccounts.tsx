@@ -54,7 +54,7 @@ export function DemoAccounts() {
             <button
               type="button"
               onClick={() => copy(account.email)}
-              className="panel group flex w-full items-center justify-between gap-4 rounded-xs px-4 py-3 text-left transition-colors hover:border-white/20"
+              className="surface group flex w-full items-center justify-between gap-4 rounded-xs px-4 py-3 text-left transition-colors hover:border-white/20"
             >
               <span className="min-w-0">
                 <span className="numeric block truncate text-[13px] text-chalk">

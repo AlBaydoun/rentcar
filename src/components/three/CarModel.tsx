@@ -253,7 +253,7 @@ export function CarModel({
         />
       </mesh>
 
-      {/* Rocker panel, which grounds the body visually */}
+      {/* Rocker surface, which grounds the body visually */}
       <mesh position={[0, profile.rideHeight * 0.42, 0]}>
         <boxGeometry args={[Math.abs(noseX - tailX) * 0.58, 0.05, profile.width + 0.08]} />
         <meshStandardMaterial color="#0d0f14" roughness={0.9} />

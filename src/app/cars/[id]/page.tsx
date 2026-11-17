@@ -168,7 +168,7 @@ export default async function CarPage({
                   return (
                     <div
                       key={spec.label}
-                      className="panel rounded-xs px-4 py-3.5"
+                      className="surface rounded-xs px-4 py-3.5"
                     >
                       <Icon size={15} className="text-amber-400" />
                       <p className="mt-2 text-[12.5px] text-chalk">{spec.label}</p>
@@ -186,9 +186,9 @@ export default async function CarPage({
               </section>
 
               {/* Owner */}
-              <section className="panel mt-8 rounded-lg p-6">
+              <section className="surface mt-8 rounded-lg p-6">
                 <div className="flex items-start gap-4">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-lg font-bold text-ink-950">
+                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-amber-500 text-lg font-bold text-ink-950">
                     {vehicle.owner.fullName.charAt(0)}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -395,7 +395,7 @@ export default async function CarPage({
               </p>
             </div>
 
-            {/* Booking panel */}
+            {/* Booking surface */}
             <div className="lg:sticky lg:top-24">
               <BookingPanel
                 vehicleId={vehicle.id}

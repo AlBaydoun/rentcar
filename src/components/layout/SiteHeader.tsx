@@ -47,7 +47,7 @@ export function SiteHeader({
             className={cn(
               'flex items-center justify-between gap-6 rounded-xl px-4 transition-all duration-500',
               scrolled
-                ? 'panel panel-lit h-14 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)]'
+                ? 'glass-nav h-14 rounded-lg'
                 : 'h-16 border border-transparent',
             )}
           >

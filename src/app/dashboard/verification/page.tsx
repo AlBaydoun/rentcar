@@ -72,7 +72,7 @@ export default async function VerificationPage() {
       <Card className="mt-8 p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+            <p className="record text-[11px] text-slate-dim">
               Profile completeness
             </p>
             <p className="numeric mt-2 text-3xl font-bold text-chalk">

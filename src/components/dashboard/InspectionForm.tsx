@@ -234,7 +234,7 @@ export function InspectionForm({
 
           <div>
             <div className="mb-2 flex items-baseline justify-between">
-              <span className="text-[12px] font-medium uppercase tracking-wider text-mist">
+              <span className="record text-[11px] text-mist">
                 Fuel level
               </span>
               <span className="numeric text-[13px] text-chalk">{Math.round(fuel * 100)}%</span>

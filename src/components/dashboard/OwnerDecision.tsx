@@ -50,7 +50,7 @@ export function OwnerDecision({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="panel rounded-lg p-6 text-center"
+        className="surface rounded-lg p-6 text-center"
       >
         <span className="mx-auto grid h-11 w-11 place-items-center rounded-full bg-cedar-500/15 text-cedar-400">
           <Check size={20} />
@@ -68,7 +68,7 @@ export function OwnerDecision({
     : null;
 
   return (
-    <div className="panel panel-lit rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-[15px] font-semibold text-chalk">Your decision</h2>
@@ -174,7 +174,7 @@ export function OwnerDecision({
               className="overflow-hidden"
             >
               <div className="pt-5">
-                <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+                <p className="mb-2 record text-[11px] text-slate-dim">
                   {choice === 'DECLINE' ? 'Reason' : 'What do you need?'}
                 </p>
                 <div className="mb-3 flex flex-wrap gap-1.5">

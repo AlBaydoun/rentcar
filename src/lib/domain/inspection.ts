@@ -327,7 +327,7 @@ export const PART_LABELS: Record<VehiclePart, string> = {
 export const SEVERITY_LABELS: Record<DamageSeverity, string> = {
   COSMETIC: 'Cosmetic — scuff or light scratch',
   MINOR: 'Minor — small dent or deep scratch',
-  MODERATE: 'Moderate — panel damage',
-  MAJOR: 'Major — panel replacement',
+  MODERATE: 'Moderate — surface damage',
+  MAJOR: 'Major — surface replacement',
   STRUCTURAL: 'Structural — frame or safety system',
 };

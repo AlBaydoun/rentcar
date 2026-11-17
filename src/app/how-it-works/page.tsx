@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Check, FileCheck2, Info, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth/session';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { HowItWorks } from '@/components/home/HowItWorks';
 import { ApprovalFlow } from '@/components/home/ApprovalFlow';
-import { Badge, Card, Container, SectionHeading } from '@/components/ui';
+import { Card, Container, SectionHeading } from '@/components/ui';
 import { Reveal, ScrollProgress } from '@/components/motion/primitives';
 import { SUPPORTED_COUNTRIES } from '@/lib/domain/countries';
 import { DOCUMENT_HINTS, DOCUMENT_LABELS } from '@/lib/domain/documents';
@@ -29,12 +29,10 @@ export default async function HowItWorksPage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="How it works"
               title={
                 <>
-                  Verified once.
-                  <br />
-                  <span className="amber-gradient">Approved every time.</span>
+                  Verified once.{' '}
+                  <span className="text-amber-400">Approved every time.</span>
                 </>
               }
               description="Renting someone's private car is a different transaction from renting from a counter, and the process is built around that rather than around hiding it."
@@ -45,148 +43,161 @@ export default async function HowItWorksPage() {
         <HowItWorks />
         <ApprovalFlow />
 
-        {/* Verification */}
-        <section id="verification" className="relative py-28 sm:py-32">
+        {/* Verification — documents and licence law, per market. */}
+        <section id="verification" className="relative py-24 sm:py-32">
           <Container>
             <Reveal>
               <SectionHeading
-                eyebrow="Verification"
                 title="What we check, and what an owner sees"
                 description="Owners never see your documents. They see which checks passed, where each document was issued, and a risk score with its reasoning attached."
               />
             </Reveal>
 
-            <div className="mt-14 grid gap-5 lg:grid-cols-2">
+            <div className="mt-12 grid gap-x-10 gap-y-14 lg:grid-cols-2">
               {SUPPORTED_COUNTRIES.map((country, index) => (
                 <Reveal key={country.code} delay={index * 0.08}>
-                  <Card className="h-full p-7">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl" aria-hidden>
+                  <div>
+                    <p className="flex items-baseline gap-2.5 border-b border-[var(--hairline-strong)] pb-4">
+                      <span className="text-xl" aria-hidden>
                         {country.flag}
                       </span>
-                      <h3 className="text-[16px] font-semibold text-chalk">
+                      <span className="display display-tight text-lg text-chalk">
                         Renting in {country.name}
-                      </h3>
-                    </div>
-
-                    <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-slate-dim">
-                      Documents required
+                      </span>
                     </p>
-                    <ul className="mt-3 space-y-2.5">
-                      {country.requiredRenterDocuments.map((doc) => (
-                        <li key={doc} className="flex gap-2.5">
-                          <FileCheck2 size={14} className="mt-0.5 shrink-0 text-cedar-400" />
-                          <div className="min-w-0">
-                            <p className="text-[13px] text-chalk">{DOCUMENT_LABELS[doc]}</p>
-                            <p className="mt-0.5 text-[11.5px] leading-snug text-slate-dim">
-                              {DOCUMENT_HINTS[doc]}
-                            </p>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
 
-                    <p className="mt-6 text-[11px] uppercase tracking-[0.18em] text-slate-dim">
-                      Licence rules
-                    </p>
-                    <ul className="mt-3 space-y-2.5">
-                      {country.licenceRules.map((rule) => (
-                        <li
-                          key={rule.issuingRegion}
-                          className="rounded-xs border border-white/[0.07] p-3.5"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Badge tone={rule.requiresInternationalPermit ? 'warn' : 'cedar'}>
-                              {rule.issuingRegion === '*'
-                                ? 'Everywhere else'
-                                : rule.issuingRegion.replace('_', '/')}
-                            </Badge>
-                            {rule.requiresInternationalPermit ? (
-                              <span className="text-[11px] text-warn">needs an IDP</span>
-                            ) : null}
-                          </div>
-                          <p className="mt-2 text-[12.5px] leading-relaxed text-mist">{rule.note}</p>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-6 grid grid-cols-2 gap-3">
-                      <div className="rounded-xs border border-white/[0.07] p-3.5">
-                        <p className="numeric text-lg font-semibold text-chalk">
+                    <div className="mt-6 flex gap-8">
+                      <p>
+                        <span className="numeric block text-[22px] font-bold leading-none text-chalk">
                           {country.minDriverAge}
-                        </p>
-                        <p className="mt-0.5 text-[11px] text-slate-dim">minimum age</p>
-                      </div>
-                      <div className="rounded-xs border border-white/[0.07] p-3.5">
-                        <p className="numeric text-lg font-semibold text-chalk">
+                        </span>
+                        <span className="mt-1.5 block text-[12px] text-slate-dim">
+                          minimum age
+                        </span>
+                      </p>
+                      <p>
+                        <span className="numeric block text-[22px] font-bold leading-none text-chalk">
                           {country.minLicenceHeldMonths} mo
-                        </p>
-                        <p className="mt-0.5 text-[11px] text-slate-dim">licence held</p>
-                      </div>
+                        </span>
+                        <span className="mt-1.5 block text-[12px] text-slate-dim">
+                          licence held
+                        </span>
+                      </p>
                     </div>
-                  </Card>
+
+                    <h3 className="mt-8 text-[13px] font-medium text-chalk">Documents required</h3>
+                    <dl className="mt-3">
+                      {country.requiredRenterDocuments.map((doc) => (
+                        <div
+                          key={doc}
+                          className="border-t border-[var(--hairline)] py-3"
+                        >
+                          <dt className="text-[13.5px] text-mist">{DOCUMENT_LABELS[doc]}</dt>
+                          <dd className="mt-1 text-[12.5px] leading-relaxed text-slate-dim">
+                            {DOCUMENT_HINTS[doc]}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    <h3 className="mt-8 text-[13px] font-medium text-chalk">
+                      Which licences are legal here
+                    </h3>
+                    <dl className="mt-3">
+                      {country.licenceRules.map((rule) => (
+                        <div
+                          key={rule.issuingRegion}
+                          className="grid gap-x-5 gap-y-1 border-t border-[var(--hairline)] py-3 sm:grid-cols-[minmax(0,96px)_minmax(0,1fr)]"
+                        >
+                          <dt className="record text-[11.5px] text-slate-dim">
+                            {rule.issuingRegion === '*'
+                              ? 'everywhere else'
+                              : rule.issuingRegion.toLowerCase().replace('_', '/')}
+                          </dt>
+                          <dd className="text-[12.5px] leading-relaxed text-mist">
+                            {rule.note}
+                            {rule.requiresInternationalPermit ? (
+                              <span className="mt-1 block text-warn">
+                                International Driving Permit required.
+                              </span>
+                            ) : null}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
                 </Reveal>
               ))}
             </div>
           </Container>
         </section>
 
-        {/* Inspection */}
-        <section id="inspection" className="relative py-28 sm:py-32">
+        {/* Handover — a checklist, set as a checklist. */}
+        <section id="inspection" className="relative py-24 sm:py-32">
           <Container>
             <Reveal>
               <SectionHeading
-                eyebrow="Handover"
                 title="The walk-around is the whole defence"
                 description="Both parties photograph the same car at the same moment and both sign. The return is scored against that record, so a scratch either was there or it was not."
               />
             </Reveal>
 
-            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {PHOTO_REQUIREMENTS.map((requirement, index) => (
-                <Reveal key={requirement.code} delay={Math.min(index * 0.05, 0.35)}>
-                  <Card className="h-full p-6">
-                    <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-[14px] font-medium text-chalk">{requirement.label}</h3>
-                      {requirement.required ? (
-                        <Badge tone="amber">required</Badge>
-                      ) : (
-                        <Badge tone="neutral">optional</Badge>
-                      )}
-                    </div>
-                    <p className="mt-2.5 text-[12.5px] leading-relaxed text-mist">
-                      {requirement.guidance}
-                    </p>
-                  </Card>
-                </Reveal>
-              ))}
-            </div>
-
-            <Reveal delay={0.15}>
-              <Card className="mt-6 p-7">
-                <h3 className="text-[15px] font-semibold text-chalk">At the return</h3>
-                <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-                  {[
-                    'Distance driven against your included allowance, with the overage priced per kilometre.',
-                    'Fuel level against the handover level, charged per litre at the market service rate.',
-                    'Late return billed per started hour, capped at one extra rental day.',
-                    'New damage capped at your protection excess, never more.',
-                  ].map((item) => (
-                    <li key={item} className="flex gap-2.5 text-[13px] leading-relaxed text-mist">
-                      <Check size={14} className="mt-0.5 shrink-0 text-cedar-400" />
-                      {item}
+            <div className="mt-12 grid gap-x-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-start">
+              <Reveal delay={0.06}>
+                <ol className="columns-1 gap-x-10 sm:columns-2 lg:columns-1 xl:columns-2">
+                  {PHOTO_REQUIREMENTS.map((requirement, index) => (
+                    <li
+                      key={requirement.code}
+                      className="mb-5 break-inside-avoid border-t border-[var(--hairline)] pt-3"
+                    >
+                      <p className="flex items-baseline gap-2.5">
+                        <span className="numeric text-[11px] text-slate-dim">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span
+                          className={
+                            requirement.required
+                              ? 'text-[13.5px] font-medium text-chalk'
+                              : 'text-[13.5px] text-mist'
+                          }
+                        >
+                          {requirement.label}
+                        </span>
+                        {!requirement.required ? (
+                          <span className="record text-[10.5px] text-slate-dim">optional</span>
+                        ) : null}
+                      </p>
+                      <p className="mt-1 pl-[26px] text-[12.5px] leading-relaxed text-slate-dim">
+                        {requirement.guidance}
+                      </p>
                     </li>
                   ))}
-                </ul>
-                <div className="mt-5 flex items-start gap-2.5 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
-                  <Info size={15} className="mt-px shrink-0 text-amber-400" />
-                  <p className="text-[12.5px] leading-relaxed text-mist">
+                </ol>
+              </Reveal>
+
+              <Reveal delay={0.12}>
+                <div className="surface-sunken mt-10 rounded-lg p-7 lg:mt-0">
+                  <h3 className="display display-tight text-[17px] text-chalk">At the return</h3>
+                  <ul className="mt-5 space-y-4">
+                    {[
+                      'Distance driven against your included allowance, with the overage priced per kilometre.',
+                      'Fuel level against the handover level, charged per litre at the market service rate.',
+                      'Late return billed per started hour, capped at one extra rental day.',
+                      'New damage capped at your protection excess, never more.',
+                    ].map((item) => (
+                      <li key={item} className="flex gap-3 text-[13.5px] leading-relaxed text-mist">
+                        <Check size={14} className="mt-1 shrink-0 text-cedar-400" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-6 border-t border-[var(--hairline)] pt-5 text-[12.5px] leading-relaxed text-slate-dim">
                     New damage opens a claim rather than being taken from your deposit
                     automatically. Both sides get to comment before any money moves.
                   </p>
                 </div>
-              </Card>
-            </Reveal>
+              </Reveal>
+            </div>
           </Container>
         </section>
 

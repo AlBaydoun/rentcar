@@ -31,7 +31,7 @@ export function SignUpForm() {
       ) : null}
 
       <div>
-        <p className="mb-2 block text-[12px] font-medium uppercase tracking-wider text-mist">
+        <p className="mb-2 block record text-[11px] text-mist">
           What brings you here?
         </p>
         <input type="hidden" name="intent" value={intent} />

@@ -82,7 +82,6 @@ export default async function HomePage() {
               <Reveal>
                 <div className="flex flex-wrap items-end justify-between gap-6">
                   <SectionHeading
-                    eyebrow="Available now"
                     title="Cars people are actually lending"
                     description="Every one of these belongs to a verified private owner or a registered small business, not a rental desk."
                   />

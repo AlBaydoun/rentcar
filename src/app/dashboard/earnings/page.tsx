@@ -57,7 +57,7 @@ export default async function EarningsPage() {
           { label: 'Commission paid', value: commissionPaid, hint: `${Math.round(country.ownerCommissionRate * 100)}% rate` },
         ].map((stat) => (
           <Card key={stat.label} className="p-5">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-dim">{stat.label}</p>
+            <p className="record text-[11px] text-slate-dim">{stat.label}</p>
             <p className="numeric mt-2.5 text-2xl font-bold text-chalk">
               {formatMoney(money(stat.value, currency), { compact: true })}
             </p>

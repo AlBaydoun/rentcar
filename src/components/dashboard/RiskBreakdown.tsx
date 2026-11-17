@@ -28,10 +28,10 @@ export function RiskBreakdown({ risk }: { risk: RiskAssessment }) {
   const barTone = risk.tier === 'LOW' ? 'cedar' : risk.tier === 'MEDIUM' ? 'amber' : 'danger';
 
   return (
-    <div className="panel rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-dim">Risk assessment</p>
+          <p className="record text-[11px] text-slate-dim">Risk assessment</p>
           <div className="mt-2 flex items-baseline gap-3">
             <span className="numeric text-3xl font-bold text-chalk">{risk.score}</span>
             <Badge tone={tone}>{risk.tier}</Badge>
@@ -126,7 +126,7 @@ export function RiskBreakdown({ risk }: { risk: RiskAssessment }) {
 
       {risk.suggestedConditions.length > 0 ? (
         <div className="mt-5 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+          <p className="record text-[11px] text-slate-dim">
             Before you approve, you could
           </p>
           <ul className="mt-2.5 space-y-1.5">

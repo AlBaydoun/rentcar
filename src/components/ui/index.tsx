@@ -8,29 +8,42 @@ import type { ComponentProps, ReactNode } from 'react';
 
 const buttonBase =
   'relative inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap ' +
-  'transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ' +
-  'disabled:pointer-events-none disabled:opacity-45 select-none';
+  'transition-[background-color,border-color,color,transform] duration-150 ' +
+  'ease-[cubic-bezier(0.16,1,0.3,1)] active:translate-y-px select-none';
 
+/*
+ * A disabled control reads as inert rather than as a faded version of the
+ * live one — a dimmed amber fill just looks muddy, and leaves people
+ * wondering whether it is broken or merely waiting on them.
+ */
+const buttonDisabled =
+  'disabled:pointer-events-none disabled:bg-ink-850 disabled:text-slate-dim ' +
+  'disabled:border-transparent disabled:shadow-none';
+
+/*
+ * No variant pairs a border with a wide drop shadow — the "ghost card" look.
+ * The primary button is a solid fill with a single hairline top highlight,
+ * which is what gives a physical control its edge.
+ */
 const buttonVariants = {
   primary:
-    'bg-gradient-to-b from-amber-400 to-amber-600 text-ink-950 font-semibold ' +
-    'shadow-[0_1px_0_0_rgba(255,255,255,0.35)_inset,0_10px_30px_-10px_rgba(255,166,43,0.7)] ' +
-    'hover:brightness-110 hover:-translate-y-px active:translate-y-0 active:brightness-95',
+    'bg-amber-500 text-ink-950 font-semibold ' +
+    'shadow-[0_1px_0_0_oklch(1_0_0/0.4)_inset] hover:bg-amber-400',
   secondary:
-    'panel text-chalk hover:bg-white/[0.09] hover:border-white/20 hover:-translate-y-px active:translate-y-0',
-  ghost: 'text-mist hover:text-chalk hover:bg-white/[0.06]',
-  outline: 'border border-white/15 text-chalk hover:border-amber-500/60 hover:text-amber-400',
-  danger: 'bg-danger/15 text-danger border border-danger/30 hover:bg-danger/25',
-  success: 'bg-cedar-500/15 text-cedar-400 border border-cedar-500/30 hover:bg-cedar-500/25',
+    'bg-ink-850 text-chalk border border-[var(--hairline-strong)] hover:bg-ink-800',
+  ghost: 'text-mist hover:text-chalk hover:bg-ink-880',
+  outline: 'border border-[var(--hairline-strong)] text-chalk hover:border-amber-500 hover:text-amber-400',
+  danger: 'bg-danger/15 text-danger border border-danger/40 hover:bg-danger/25',
+  success: 'bg-cedar-500/15 text-cedar-400 border border-cedar-500/40 hover:bg-cedar-500/25',
 } as const;
 
 const buttonSizes = {
-  xs: 'h-8 px-3 text-xs rounded-[8px]',
-  sm: 'h-9 px-4 text-[13px] rounded-[10px]',
-  md: 'h-11 px-5 text-sm rounded-xs',
-  lg: 'h-13 px-7 text-[15px] rounded-sm',
-  xl: 'h-15 px-9 text-base rounded-md',
-  icon: 'h-10 w-10 rounded-xs',
+  xs: 'h-8 px-3 text-xs rounded-xs',
+  sm: 'h-9 px-4 text-[13px] rounded-sm',
+  md: 'h-11 px-5 text-sm rounded-sm',
+  lg: 'h-12 px-6 text-[15px] rounded-md',
+  xl: 'h-14 px-8 text-base rounded-md',
+  icon: 'h-10 w-10 rounded-sm',
 } as const;
 
 export interface ButtonProps extends ComponentProps<'button'> {
@@ -38,15 +51,16 @@ export interface ButtonProps extends ComponentProps<'button'> {
   size?: keyof typeof buttonSizes;
 }
 
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  className,
-  ...props
-}: ButtonProps) {
+export function Button({ variant = 'primary', size = 'md', className, ...props }: ButtonProps) {
   return (
     <button
-      className={cn(buttonBase, buttonVariants[variant], buttonSizes[size], className)}
+      className={cn(
+        buttonBase,
+        buttonVariants[variant],
+        buttonSizes[size],
+        buttonDisabled,
+        className,
+      )}
       {...props}
     />
   );
@@ -75,21 +89,12 @@ export function ButtonLink({
 /* Surfaces                                                                    */
 /* -------------------------------------------------------------------------- */
 
-export function Card({
-  className,
-  lit = true,
-  ...props
-}: ComponentProps<'div'> & { lit?: boolean }) {
-  return (
-    <div
-      className={cn('panel rounded-lg', lit && 'panel-lit', className)}
-      {...props}
-    />
-  );
+export function Card({ className, ...props }: ComponentProps<'div'>) {
+  return <div className={cn('surface rounded-lg', className)} {...props} />;
 }
 
 export function Panel({ className, ...props }: ComponentProps<'div'>) {
-  return <div className={cn('panel-solid rounded-md', className)} {...props} />;
+  return <div className={cn('surface-raised rounded-md', className)} {...props} />;
 }
 
 export function Divider({ className }: { className?: string }) {
@@ -97,17 +102,17 @@ export function Divider({ className }: { className?: string }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Badge & pills                                                               */
+/* Badge & labels                                                              */
 /* -------------------------------------------------------------------------- */
 
 const badgeTones = {
-  neutral: 'bg-white/[0.06] text-mist border-white/10',
-  amber: 'bg-amber-500/12 text-amber-400 border-amber-500/25',
-  cedar: 'bg-cedar-500/12 text-cedar-400 border-cedar-500/25',
-  steel: 'bg-steel-500/12 text-steel-400 border-steel-500/25',
-  danger: 'bg-danger/12 text-danger border-danger/25',
-  warn: 'bg-warn/12 text-warn border-warn/25',
-  success: 'bg-success/12 text-success border-success/25',
+  neutral: 'bg-ink-800 text-mist border-[var(--hairline-strong)]',
+  amber: 'bg-amber-500/12 text-amber-400 border-amber-500/30',
+  cedar: 'bg-cedar-500/12 text-cedar-400 border-cedar-500/30',
+  steel: 'bg-steel-500/14 text-steel-400 border-steel-500/30',
+  danger: 'bg-danger/12 text-danger border-danger/30',
+  warn: 'bg-warn/12 text-warn border-warn/30',
+  success: 'bg-success/12 text-success border-success/30',
 } as const;
 
 export type BadgeTone = keyof typeof badgeTones;
@@ -121,7 +126,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium leading-none tracking-wide',
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-medium leading-none',
         badgeTones[tone],
         className,
       )}
@@ -132,17 +137,17 @@ export function Badge({
   );
 }
 
-export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
+/**
+ * A label tied to the content below it by a rule.
+ *
+ * Deliberately not used above every section — only where a block of data
+ * genuinely needs naming, so it stays a label rather than page furniture.
+ */
+export function RuleLabel({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div
-      className={cn(
-        'inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] text-mist',
-        className,
-      )}
-    >
-      <span className="h-px w-6 bg-gradient-to-r from-transparent to-amber-500" />
-      {children}
-    </div>
+    <p className={cn('rule-label record text-[11px] text-slate-dim', className)}>
+      <span>{children}</span>
+    </p>
   );
 }
 
@@ -151,9 +156,9 @@ export function Eyebrow({ children, className }: { children: ReactNode; classNam
 /* -------------------------------------------------------------------------- */
 
 const fieldBase =
-  'w-full rounded-xs border border-white/10 bg-ink-900/70 px-3.5 text-sm text-chalk ' +
+  'w-full rounded-sm border border-[var(--hairline-strong)] bg-ink-900 px-3.5 text-sm text-chalk ' +
   'placeholder:text-slate-dim transition-colors duration-150 ' +
-  'focus:border-amber-500/60 focus:bg-ink-900 focus:outline-none focus:ring-2 focus:ring-amber-500/15 ' +
+  'focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/25 ' +
   'disabled:opacity-50';
 
 export function Input({ className, ...props }: ComponentProps<'input'>) {
@@ -161,7 +166,9 @@ export function Input({ className, ...props }: ComponentProps<'input'>) {
 }
 
 export function Textarea({ className, ...props }: ComponentProps<'textarea'>) {
-  return <textarea className={cn(fieldBase, 'min-h-28 py-3 leading-relaxed', className)} {...props} />;
+  return (
+    <textarea className={cn(fieldBase, 'min-h-28 py-3 leading-relaxed', className)} {...props} />
+  );
 }
 
 export function Select({ className, children, ...props }: ComponentProps<'select'>) {
@@ -170,7 +177,7 @@ export function Select({ className, children, ...props }: ComponentProps<'select
       className={cn(fieldBase, 'h-11 appearance-none pr-9 [&>option]:bg-ink-880', className)}
       style={{
         backgroundImage:
-          "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23a4adc0' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E\")",
+          "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23a9b2c4' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E\")",
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'right 0.9rem center',
       }}
@@ -183,10 +190,7 @@ export function Select({ className, children, ...props }: ComponentProps<'select
 
 export function Label({ className, children, ...props }: ComponentProps<'label'>) {
   return (
-    <label
-      className={cn('mb-2 block text-[12px] font-medium uppercase tracking-wider text-mist', className)}
-      {...props}
-    >
+    <label className={cn('mb-2 block text-[12.5px] font-medium text-mist', className)} {...props}>
       {children}
     </label>
   );
@@ -219,21 +223,25 @@ export function Field({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Layout helpers                                                              */
+/* Layout                                                                      */
 /* -------------------------------------------------------------------------- */
 
 export function Container({ className, ...props }: ComponentProps<'div'>) {
-  return <div className={cn('mx-auto w-full max-w-[1240px] px-5 sm:px-8', className)} {...props} />;
+  return <div className={cn('mx-auto w-full max-w-[1200px] px-5 sm:px-8', className)} {...props} />;
 }
 
+/**
+ * Section headings lead with the heading itself.
+ *
+ * There is deliberately no kicker slot: an uppercase tracked label above every
+ * section is page furniture, not voice.
+ */
 export function SectionHeading({
-  eyebrow,
   title,
   description,
   align = 'left',
   className,
 }: {
-  eyebrow?: string;
   title: ReactNode;
   description?: ReactNode;
   align?: 'left' | 'center';
@@ -241,14 +249,11 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn(align === 'center' && 'text-center', className)}>
-      {eyebrow ? (
-        <Eyebrow className={cn(align === 'center' && 'justify-center')}>{eyebrow}</Eyebrow>
-      ) : null}
-      <h2 className="display mt-4 text-[clamp(1.9rem,4.2vw,3.1rem)] text-gradient">{title}</h2>
+      <h2 className="display text-[clamp(1.75rem,3.6vw,2.6rem)] text-chalk">{title}</h2>
       {description ? (
         <p
           className={cn(
-            'mt-4 max-w-2xl text-[15px] leading-relaxed text-mist',
+            'lede mt-4 text-[15px] leading-relaxed text-mist',
             align === 'center' && 'mx-auto',
           )}
         >
@@ -272,7 +277,7 @@ export function Stat({
 }) {
   return (
     <div className={className}>
-      <div className="numeric text-[clamp(1.6rem,3vw,2.4rem)] font-bold leading-none text-chalk">
+      <div className="numeric text-[clamp(1.6rem,3vw,2.3rem)] font-bold leading-none text-chalk">
         {value}
       </div>
       <div className="mt-2 text-[13px] font-medium text-chalk">{label}</div>
@@ -297,7 +302,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-lg border border-dashed border-white/10 px-6 py-16 text-center',
+        'flex flex-col items-center justify-center rounded-lg border border-dashed border-[var(--hairline-strong)] px-6 py-16 text-center',
         className,
       )}
     >
@@ -323,16 +328,20 @@ export function KeyValue({
   className?: string;
 }) {
   return (
-    <dl className={cn('divide-y divide-white/[0.06]', className)}>
+    <dl className={cn('divide-y divide-[var(--hairline)]', className)}>
       {rows.map((row) => (
         <div key={row.label} className="flex items-baseline justify-between gap-6 py-3">
           <dt className="text-[13px] text-mist">
             {row.label}
             {row.hint ? (
-              <span className="mt-0.5 block text-[11px] leading-snug text-slate-dim">{row.hint}</span>
+              <span className="mt-0.5 block text-[11.5px] leading-snug text-slate-dim">
+                {row.hint}
+              </span>
             ) : null}
           </dt>
-          <dd className="numeric shrink-0 text-right text-sm font-medium text-chalk">{row.value}</dd>
+          <dd className="numeric shrink-0 text-right text-sm font-medium text-chalk">
+            {row.value}
+          </dd>
         </div>
       ))}
     </dl>
@@ -349,15 +358,15 @@ export function ProgressBar({
   className?: string;
 }) {
   const tones = {
-    amber: 'from-amber-400 to-amber-600',
-    cedar: 'from-cedar-400 to-cedar-500',
-    danger: 'from-danger to-red-600',
-    steel: 'from-steel-400 to-steel-500',
+    amber: 'bg-amber-500',
+    cedar: 'bg-cedar-500',
+    danger: 'bg-danger',
+    steel: 'bg-steel-500',
   };
   return (
-    <div className={cn('h-1.5 w-full overflow-hidden rounded-full bg-white/[0.07]', className)}>
+    <div className={cn('h-1.5 w-full overflow-hidden rounded-full bg-ink-800', className)}>
       <div
-        className={cn('h-full rounded-full bg-gradient-to-r transition-all duration-700', tones[tone])}
+        className={cn('h-full rounded-full transition-all duration-700', tones[tone])}
         style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
       />
     </div>

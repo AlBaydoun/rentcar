@@ -134,7 +134,7 @@ export default async function OwnerBookingPage({
           {/* Renter profile */}
           <Card className="p-6">
             <div className="flex items-start gap-4">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-xl font-bold text-ink-950">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-amber-500 text-xl font-bold text-ink-950">
                 {renter.fullName.charAt(0)}
               </span>
               <div className="min-w-0 flex-1">
@@ -180,7 +180,7 @@ export default async function OwnerBookingPage({
 
             {booking.renterMessage ? (
               <div className="mt-6 rounded-xs border border-white/[0.07] bg-white/[0.02] p-4">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+                <p className="record text-[11px] text-slate-dim">
                   What they said
                 </p>
                 <p className="mt-2 whitespace-pre-line text-[13.5px] leading-relaxed text-mist">
@@ -203,14 +203,11 @@ export default async function OwnerBookingPage({
               you see the outcome, not the scans.
             </p>
 
-            <ul className="mt-5 space-y-2">
+            <ul className="mt-5 divide-y divide-[var(--hairline)] border-y border-[var(--hairline)]">
               {required.map((type) => {
                 const doc = renter.documents.find((entry) => entry.type === type);
                 return (
-                  <li
-                    key={type}
-                    className="flex items-center justify-between gap-4 rounded-xs border border-white/[0.07] px-4 py-3"
-                  >
+                  <li key={type} className="flex items-center justify-between gap-4 py-3.5">
                     <span className="flex items-center gap-2.5">
                       <FileCheck2
                         size={14}

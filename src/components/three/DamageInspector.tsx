@@ -37,7 +37,7 @@ const SEVERITY_COLOUR: Record<DamageSeverity, string> = {
   STRUCTURAL: '#dc2626',
 };
 
-/** Maps a click point on the body to the nearest inspectable panel. */
+/** Maps a click point on the body to the nearest inspectable surface. */
 function partAtPoint(point: THREE.Vector3, hint: string): VehiclePart {
   if (hint === 'WINDSCREEN') return 'WINDSCREEN';
   if (hint === 'WHEELS') return 'WHEELS';
@@ -74,7 +74,7 @@ function Pin({
         <sphereGeometry args={[selected ? 0.075 : 0.055, 16, 16]} />
         <meshBasicMaterial color={colour} toneMapped={false} />
       </mesh>
-      {/* Halo so a pin on a dark panel is still findable */}
+      {/* Halo so a pin on a dark surface is still findable */}
       <mesh>
         <sphereGeometry args={[selected ? 0.13 : 0.1, 16, 16]} />
         <meshBasicMaterial color={colour} transparent opacity={0.22} toneMapped={false} />

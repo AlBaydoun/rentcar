@@ -69,7 +69,7 @@ export function AvailabilityCalendar({
   }, [offset, parsedBlocks, rules]);
 
   return (
-    <div className="panel rounded-lg p-5">
+    <div className="surface rounded-lg p-5">
       <div className="mb-5 flex items-center justify-between">
         <button
           type="button"
@@ -112,7 +112,7 @@ export function AvailabilityCalendar({
               {WEEKDAYS.map((day) => (
                 <span
                   key={day}
-                  className="pb-1 text-center text-[10px] uppercase tracking-wider text-slate-dim"
+                  className="pb-1 text-center record text-[11px] text-slate-dim"
                 >
                   {day}
                 </span>

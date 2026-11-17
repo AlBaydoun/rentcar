@@ -125,7 +125,7 @@ export function CarViewer({
         </button>
       </div>
 
-      <div className="pointer-events-none absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/60 px-2.5 py-1 text-[10.5px] uppercase tracking-wider text-slate-dim backdrop-blur">
+      <div className="pointer-events-none absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/60 px-2.5 py-1 record text-[11px] text-slate-dim backdrop-blur">
         <Maximize2 size={10} />
         Drag to look around
       </div>

@@ -3,57 +3,83 @@
 /*
  * KarRent design tokens.
  *
- * The palette is built for a dark, cinematic product: a near-black ink base
- * with warm amber as the single action colour, plus one accent per market so
- * a German listing and a Lebanese one are distinguishable at a glance.
+ * The scene this is designed for: an owner in Beirut, in bed at eleven at
+ * night, gets a notification that a stranger wants their car tomorrow and has
+ * to read a risk profile and decide — on a phone, without turning the light
+ * on. That forces a dark surface, high-contrast text, and numerals you can
+ * read at a glance.
+ *
+ * Colour strategy is restrained: tinted neutrals plus one accent. The two
+ * market colours are functional, not decorative — steel always means Germany,
+ * cedar always means Lebanon, nowhere else.
  */
 @theme {
-  --color-ink-950: #06070a;
-  --color-ink-900: #0a0c11;
-  --color-ink-880: #0e1118;
-  --color-ink-850: #12151e;
-  --color-ink-800: #171b26;
-  --color-ink-750: #1d2230;
-  --color-ink-700: #262c3c;
-  --color-ink-600: #39405a;
+  /* Surfaces — a cool-cast near-black ramp. */
+  --color-ink-950: oklch(0.145 0.008 262);
+  --color-ink-900: oklch(0.176 0.009 262);
+  --color-ink-880: oklch(0.203 0.010 262);
+  --color-ink-850: oklch(0.231 0.011 262);
+  --color-ink-800: oklch(0.268 0.012 262);
+  --color-ink-750: oklch(0.313 0.013 262);
+  --color-ink-700: oklch(0.366 0.014 262);
+  --color-ink-600: oklch(0.452 0.016 262);
 
-  --color-chalk: #eef1f7;
-  --color-mist: #a4adc0;
-  --color-slate-dim: #6b7488;
+  /*
+   * Text ramp. Every step is verified against ink-850, the lightest surface
+   * body text ever sits on — including `slate-dim`, which carries most of the
+   * small metadata in the product and so cannot be a decorative grey.
+   */
+  --color-chalk: oklch(0.971 0.003 262);
+  --color-mist: oklch(0.812 0.013 262);
+  --color-slate-dim: oklch(0.682 0.017 262);
 
-  --color-amber-400: #ffc061;
-  --color-amber-500: #ffa62b;
-  --color-amber-600: #f38b0c;
+  --color-amber-400: oklch(0.858 0.124 78);
+  --color-amber-500: oklch(0.795 0.152 65);
+  --color-amber-600: oklch(0.724 0.161 55);
 
-  --color-cedar-400: #4ee0a5;
-  --color-cedar-500: #22c98c;
+  --color-cedar-400: oklch(0.846 0.145 165);
+  --color-cedar-500: oklch(0.772 0.154 164);
 
-  --color-steel-400: #86aaff;
-  --color-steel-500: #5c85f5;
+  --color-steel-400: oklch(0.775 0.102 266);
+  --color-steel-500: oklch(0.690 0.137 266);
 
-  --color-danger: #ff6b6b;
-  --color-success: #4ade80;
-  --color-warn: #fbbf24;
+  --color-danger: oklch(0.748 0.149 24);
+  --color-success: oklch(0.846 0.157 155);
+  --color-warn: oklch(0.846 0.146 85);
 
-  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, monospace;
 
+  /*
+   * Radii top out at 14px on panels. Anything rounder reads as a toy, and
+   * this product is closer to a registration document than a game.
+   */
   --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --radius-2xl: 36px;
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 14px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
-  --hairline: rgba(255, 255, 255, 0.07);
-  --hairline-strong: rgba(255, 255, 255, 0.13);
-  --glow-amber: 0 0 0 1px rgba(255, 166, 43, 0.28), 0 12px 44px -12px rgba(255, 166, 43, 0.5);
+  --hairline: oklch(0.31 0.012 262);
+  --hairline-strong: oklch(0.40 0.014 262);
+
+  /* Semantic stacking order — never an arbitrary 9999. */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-nav: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+
   color-scheme: dark;
 }
 
@@ -70,104 +96,118 @@ body {
   background: var(--color-ink-950);
   color: var(--color-chalk);
   font-family: var(--font-sans);
-  font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* The ambient field behind every page — a slow, two-source aurora. */
+/*
+ * Ambient field. Kept weak and cool so it reads as the glow off a screen in a
+ * dark room rather than as decoration.
+ */
 .ambient-field {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: var(--z-base);
   pointer-events: none;
   background:
-    radial-gradient(70rem 40rem at 12% -8%, rgba(255, 166, 43, 0.11), transparent 62%),
-    radial-gradient(56rem 34rem at 92% 6%, rgba(92, 133, 245, 0.1), transparent 60%),
-    radial-gradient(48rem 30rem at 50% 108%, rgba(34, 201, 140, 0.07), transparent 62%);
+    radial-gradient(60rem 36rem at 8% -10%, oklch(0.795 0.152 65 / 0.07), transparent 60%),
+    radial-gradient(48rem 30rem at 94% 4%, oklch(0.690 0.137 266 / 0.06), transparent 58%);
 }
 
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
+/*
+ * Display type is set WIDE rather than tight. The saturated default for a
+ * dark product page is huge, tightly-tracked geometric sans; widening the
+ * grotesque instead reads as engineered, which is what this product is.
+ */
 .display {
   font-family: var(--font-display);
+  font-variation-settings: "wdth" 112;
   font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 0.98;
+  letter-spacing: -0.021em;
+  line-height: 1.02;
+  text-wrap: balance;
 }
 
-.numeric {
+.display-tight {
+  font-variation-settings: "wdth" 100;
+  letter-spacing: -0.015em;
+}
+
+/*
+ * Mono is a second voice, not just a numeral style: it marks machine-written
+ * record data — prices, references, plates, state names, timestamps — apart
+ * from human prose.
+ */
+.numeric,
+.record {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
 
-/* Glass panel used for cards, sheets and the nav bar. */
-.panel {
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.055) 0%,
-    rgba(255, 255, 255, 0.018) 40%,
-    rgba(255, 255, 255, 0.008) 100%
-  );
-  border: 1px solid var(--hairline);
-  backdrop-filter: blur(20px) saturate(140%);
+/*
+ * A slashed zero earns its place in a reference number or a plate, where an
+ * O/0 mix-up matters. On a price or a score it just looks like a glyph bug.
+ */
+.numeric {
+  font-feature-settings: "zero" 0;
 }
 
-.panel-solid {
-  background: color-mix(in oklab, var(--color-ink-880) 92%, transparent);
+.lede {
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.prose-measure {
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+/* The default surface is opaque. Glass is reserved for the nav over 3D. */
+.surface {
+  background: var(--color-ink-900);
   border: 1px solid var(--hairline);
 }
 
-/* A one-pixel top highlight, the detail that makes glass read as glass. */
-.panel-lit {
-  position: relative;
+.surface-raised {
+  background: var(--color-ink-880);
+  border: 1px solid var(--hairline);
 }
-.panel-lit::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.32) 22%,
-    rgba(255, 255, 255, 0.32) 78%,
-    transparent
-  );
-  opacity: 0.55;
-  pointer-events: none;
+
+.surface-sunken {
+  background: oklch(0.125 0.007 262);
+  border: 1px solid var(--hairline);
+}
+
+/*
+ * The one legitimate glass surface: the navigation bar, which floats over a
+ * live 3D scene and has to stay legible as the scene moves beneath it.
+ */
+.glass-nav {
+  background: oklch(0.145 0.008 262 / 0.72);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(18px) saturate(150%);
 }
 
 .hairline-x {
-  background: linear-gradient(90deg, transparent, var(--hairline-strong) 20%, var(--hairline-strong) 80%, transparent);
+  background: var(--hairline);
   height: 1px;
 }
 
-.text-gradient {
-  background: linear-gradient(180deg, var(--color-chalk) 30%, rgba(238, 241, 247, 0.45) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* A short rule that ties a label to the content beneath it. */
+.rule-label {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.rule-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
 }
 
-.amber-gradient {
-  background: linear-gradient(96deg, var(--color-amber-400), var(--color-amber-600));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Scrollbars — thin, unobtrusive, still visible on dark. */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -176,13 +216,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-ink-700);
   border-radius: 99px;
   border: 3px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-ink-600);
   background-clip: content-box;
 }
 
@@ -193,7 +233,6 @@ body {
   scrollbar-width: none;
 }
 
-/* Focus states never disappear — keyboard users get the same affordances. */
 :focus-visible {
   outline: 2px solid var(--color-amber-500);
   outline-offset: 2px;
@@ -205,40 +244,15 @@ body {
   to { transform: translateX(-50%); }
 }
 .animate-marquee {
-  animation: marquee 42s linear infinite;
+  animation: marquee 48s linear infinite;
 }
 
-@keyframes shimmer {
-  100% { transform: translateX(100%); }
-}
-.shimmer {
-  position: relative;
-  overflow: hidden;
-}
-.shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
-  animation: shimmer 1.8s infinite;
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
 }
 
-@keyframes pulse-ring {
-  0% { transform: scale(0.85); opacity: 0.85; }
-  70% { transform: scale(1.9); opacity: 0; }
-  100% { opacity: 0; }
-}
-.pulse-ring::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid currentColor;
-  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
-}
-
-/* Everything animated must yield to a reduced-motion preference. */
+/* Motion yields to a reduced-motion preference, without hiding content. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *,

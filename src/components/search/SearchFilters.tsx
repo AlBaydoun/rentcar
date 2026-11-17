@@ -51,7 +51,7 @@ export function SearchFilters({
   const body = (
     <div className="space-y-7">
       <div>
-        <p className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Market</p>
+        <p className="mb-3 record text-[11px] text-slate-dim">Market</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { code: 'DE', label: '🇩🇪 Germany' },
@@ -78,7 +78,7 @@ export function SearchFilters({
       </div>
 
       <div>
-        <p className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">City</p>
+        <p className="mb-3 record text-[11px] text-slate-dim">City</p>
         <Select
           value={params.get('city') ?? ''}
           onChange={(event) => setParam('city', event.target.value || null)}
@@ -93,7 +93,7 @@ export function SearchFilters({
       </div>
 
       <div>
-        <p className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Type</p>
+        <p className="mb-3 record text-[11px] text-slate-dim">Type</p>
         <div className="flex flex-wrap gap-1.5">
           {VEHICLE_CATEGORIES.filter((category) =>
             facets.categories.some((entry) => entry.name === category),
@@ -122,7 +122,7 @@ export function SearchFilters({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <p className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Gearbox</p>
+          <p className="mb-3 record text-[11px] text-slate-dim">Gearbox</p>
           <Select
             value={params.get('transmission') ?? ''}
             onChange={(event) => setParam('transmission', event.target.value || null)}
@@ -133,7 +133,7 @@ export function SearchFilters({
           </Select>
         </div>
         <div>
-          <p className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Fuel</p>
+          <p className="mb-3 record text-[11px] text-slate-dim">Fuel</p>
           <Select
             value={params.get('fuelType') ?? ''}
             onChange={(event) => setParam('fuelType', event.target.value || null)}
@@ -148,7 +148,7 @@ export function SearchFilters({
       </div>
 
       <div>
-        <p className="mb-3 text-[11px] uppercase tracking-[0.18em] text-slate-dim">Seats</p>
+        <p className="mb-3 record text-[11px] text-slate-dim">Seats</p>
         <div className="flex gap-1.5">
           {[2, 4, 5, 7].map((seats) => {
             const selected = params.get('seats') === String(seats);
@@ -174,7 +174,7 @@ export function SearchFilters({
       {facets.priceRange ? (
         <div>
           <div className="mb-3 flex items-baseline justify-between">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-dim">Max per day</p>
+            <p className="record text-[11px] text-slate-dim">Max per day</p>
             <span className="numeric text-[13px] text-chalk">
               {formatMoney(
                 money(Number(params.get('maxPrice') ?? facets.priceRange.max), currency),
@@ -240,7 +240,7 @@ export function SearchFilters({
       ) : null}
 
       <aside className="hidden lg:block">
-        <div className="panel sticky top-24 rounded-lg p-6">{body}</div>
+        <div className="surface sticky top-24 rounded-lg p-6">{body}</div>
       </aside>
     </>
   );

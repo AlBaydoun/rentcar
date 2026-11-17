@@ -29,7 +29,7 @@ export function PayNow({
   const [state, action, pending] = useActionState(payBookingAction, initial);
 
   return (
-    <div className="panel panel-lit rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       <h2 className="text-[15px] font-semibold text-chalk">Complete your payment</h2>
       <p className="mt-1.5 text-[13px] leading-relaxed text-mist">
         The owner approved your request. Authorising now locks the dates; the money is only taken
@@ -86,7 +86,7 @@ export function TripStep({
   const [state, action, pending] = useActionState(tripEventAction, initial);
 
   return (
-    <div className="panel rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       <h2 className="text-[15px] font-semibold text-chalk">{label}</h2>
       <p className="mt-1.5 text-[13px] leading-relaxed text-mist">{description}</p>
 
@@ -116,7 +116,7 @@ export function CancelBooking({
   const [state, action, pending] = useActionState(cancelBookingAction, initial);
 
   return (
-    <form action={action} className="panel rounded-lg p-6">
+    <form action={action} className="surface rounded-lg p-6">
       <input type="hidden" name="bookingId" value={bookingId} />
       <h2 className="text-[14px] font-semibold text-chalk">Need to cancel?</h2>
       <p className="mt-1.5 text-[12.5px] leading-relaxed text-mist">{refundHint}</p>

@@ -21,7 +21,7 @@ export function MessageThread({
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
-    <div className="panel rounded-lg p-6">
+    <div className="surface rounded-lg p-6">
       <h2 className="text-[15px] font-semibold text-chalk">Messages</h2>
 
       <ul className="mt-5 space-y-3">
@@ -40,7 +40,7 @@ export function MessageThread({
                       : 'border border-white/[0.07] bg-white/[0.03] text-mist',
                   )}
                 >
-                  <p className="text-[10.5px] uppercase tracking-wider text-slate-dim">
+                  <p className="record text-[11px] text-slate-dim">
                     {mine ? 'You' : message.senderName.split(' ')[0]} ·{' '}
                     {new Date(message.createdAt).toLocaleString('en-GB', {
                       day: 'numeric',

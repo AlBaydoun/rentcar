@@ -94,12 +94,9 @@ export function EarningsCalculator() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center">
           <Reveal>
             <SectionHeading
-              eyebrow="For owners"
               title={
                 <>
-                  Your car is idle
-                  <br />
-                  <span className="amber-gradient">96% of the time.</span>
+                  Your car is idle <span className="text-amber-400">96%</span> of the time
                 </>
               }
               description="Set your own price, block the dates you need it, and approve only the people you want driving it. This calculator runs the real pricing engine — the payout it shows is the payout you would get."
@@ -108,7 +105,7 @@ export function EarningsCalculator() {
             <div className="mt-8 space-y-6">
               {/* Market */}
               <div>
-                <p className="mb-2.5 text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+                <p className="mb-2.5 record text-[11px] text-slate-dim">
                   Market
                 </p>
                 <div className="inline-flex rounded-xs border border-white/10 bg-ink-900/70 p-1">
@@ -128,7 +125,7 @@ export function EarningsCalculator() {
                       {countryCode === code && (
                         <motion.span
                           layoutId="earnings-market"
-                          className="absolute inset-0 rounded-[10px] bg-gradient-to-b from-amber-400 to-amber-600"
+                          className="absolute inset-0 rounded-[10px] bg-amber-500"
                           transition={{ type: 'spring', stiffness: 400, damping: 34 }}
                         />
                       )}
@@ -142,7 +139,7 @@ export function EarningsCalculator() {
 
               {/* Category */}
               <div>
-                <p className="mb-2.5 text-[11px] uppercase tracking-[0.18em] text-slate-dim">
+                <p className="mb-2.5 record text-[11px] text-slate-dim">
                   Your car
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -172,7 +169,7 @@ export function EarningsCalculator() {
                 <div className="mb-2.5 flex items-baseline justify-between">
                   <label
                     htmlFor="daily-rate"
-                    className="text-[11px] uppercase tracking-[0.18em] text-slate-dim"
+                    className="record text-[11px] text-slate-dim"
                   >
                     Your daily price
                   </label>
@@ -197,7 +194,7 @@ export function EarningsCalculator() {
                 <div className="mb-2.5 flex items-baseline justify-between">
                   <label
                     htmlFor="days-rented"
-                    className="text-[11px] uppercase tracking-[0.18em] text-slate-dim"
+                    className="record text-[11px] text-slate-dim"
                   >
                     Days rented per month
                   </label>
@@ -221,7 +218,7 @@ export function EarningsCalculator() {
           </Reveal>
 
           <Reveal delay={0.12} direction="left">
-            <div className="panel panel-lit relative overflow-hidden rounded-xl p-7 sm:p-9">
+            <div className="surface relative overflow-hidden rounded-xl p-7 sm:p-9">
               <div
                 className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-gradient-to-b from-amber-500/20 to-transparent blur-3xl"
                 aria-hidden

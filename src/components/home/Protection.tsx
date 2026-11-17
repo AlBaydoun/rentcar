@@ -1,9 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Check, Minus, ShieldCheck } from 'lucide-react';
-import { Badge, Container, SectionHeading } from '@/components/ui';
+import { Check, Minus } from 'lucide-react';
+import { Container, SectionHeading } from '@/components/ui';
 import { Reveal } from '@/components/motion/primitives';
 import { INSURANCE_TIER_SPECS, quoteInsurance } from '@/lib/domain/insurance';
 import { GERMANY } from '@/lib/domain/countries';
@@ -12,11 +10,13 @@ import type { InsuranceTier } from '@/lib/domain/types';
 import { cn } from '@/lib/cn';
 
 /**
- * Protection tiers, priced live.
+ * Protection tiers.
  *
- * The numbers here come from the real `quoteInsurance` function against a
- * representative car, so the marketing page cannot drift away from what the
- * checkout will actually charge.
+ * Choosing a tier is a comparison across identical dimensions, so this is a
+ * comparison table rather than three cards — three cards force the reader to
+ * hold each column in their head and leave the shortest tier sitting in a
+ * void. Every figure comes from the real `quoteInsurance` function against a
+ * representative car, so the page cannot drift from what checkout charges.
  */
 
 const SAMPLE = {
@@ -30,137 +30,209 @@ const SAMPLE = {
 
 const TIERS: InsuranceTier[] = ['BASIC', 'PLUS', 'MAX'];
 
+/** Which tier each line of cover first appears on. */
+const COVERAGE: { label: string; from: InsuranceTier; note?: string }[] = [
+  { label: 'Third-party liability', from: 'BASIC', note: 'Always in force — required by law' },
+  { label: 'Damage to the vehicle above your excess', from: 'BASIC' },
+  { label: 'Total loss above your excess', from: 'BASIC' },
+  { label: 'Glass, tyres, wheels and undercarriage', from: 'PLUS' },
+  { label: 'Theft and attempted theft', from: 'PLUS' },
+  { label: 'Roadside assistance and recovery', from: 'PLUS', note: '24/7' },
+  { label: 'Replacement key cover', from: 'PLUS' },
+  { label: 'Personal accident cover', from: 'MAX', note: 'Driver and passengers' },
+  { label: 'Loss-of-use paid to the owner', from: 'MAX' },
+  { label: 'Misfuelling and lost-key recovery', from: 'MAX' },
+];
+
+const RANK: Record<InsuranceTier, number> = { BASIC: 0, PLUS: 1, MAX: 2 };
+
 export function Protection() {
-  const [hovered, setHovered] = useState<InsuranceTier | null>('PLUS');
+  const quotes = Object.fromEntries(
+    TIERS.map((tier) => [tier, quoteInsurance({ ...SAMPLE, tier })]),
+  ) as Record<InsuranceTier, ReturnType<typeof quoteInsurance>>;
+
+  /** The highlighted column gets a continuous tint down the whole table. */
+  const columnTint = (tier: InsuranceTier) =>
+    tier === 'PLUS' ? 'bg-amber-500/[0.055]' : undefined;
 
   return (
-    <section id="protection" className="relative py-28 sm:py-32">
+    <section id="protection" className="relative py-24 sm:py-32">
       <Container>
         <Reveal>
           <SectionHeading
-            align="center"
-            eyebrow="Protection"
-            title={
-              <>
-                Three tiers. One honest number:
-                <br />
-                <span className="amber-gradient">what you still owe if it goes wrong.</span>
-              </>
-            }
+            title="Three tiers, one honest number: what you still owe if it goes wrong"
             description="Statutory liability cover always travels with the car. What you choose here is how much of the vehicle's own repair bill stays with you — the excess."
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-5 lg:grid-cols-3">
-          {TIERS.map((tier, index) => {
-            const spec = INSURANCE_TIER_SPECS[tier];
-            const quote = quoteInsurance({ ...SAMPLE, tier });
-            const featured = tier === 'PLUS';
-            const active = hovered === tier;
+        <Reveal delay={0.08}>
+          <div className="mt-12 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-separate border-spacing-0 text-left">
+              <caption className="sr-only">
+                KarRent protection tiers compared on a €48 per day compact car over four days
+              </caption>
 
-            return (
-              <motion.div
-                key={tier}
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-12%' }}
-                transition={{ duration: 0.6, delay: index * 0.09, ease: [0.16, 1, 0.3, 1] }}
-                onMouseEnter={() => setHovered(tier)}
-                className={cn(
-                  'panel panel-lit relative flex flex-col overflow-hidden rounded-xl p-7 transition-[transform,border-color] duration-300',
-                  active && 'border-amber-500/30 lg:-translate-y-1.5',
-                  featured && 'lg:scale-[1.02]',
-                )}
-              >
-                {featured && (
-                  <div
-                    className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-gradient-to-b from-amber-500/25 to-transparent blur-3xl"
-                    aria-hidden
-                  />
-                )}
-
-                <div className="relative flex items-center justify-between">
-                  <h3 className="display text-xl text-chalk">{spec.name}</h3>
-                  {featured && <Badge tone="amber">Most chosen</Badge>}
-                </div>
-
-                <p className="relative mt-2 text-[13px] leading-relaxed text-mist">{spec.tagline}</p>
-
-                <div className="relative mt-7">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="numeric text-[2.6rem] font-bold leading-none text-chalk">
-                      {quote.dailyPremium.amount === 0
-                        ? 'Included'
-                        : formatMoney(quote.dailyPremium)}
+              <thead>
+                <tr>
+                  <th scope="col" className="w-[42%] pb-5 align-bottom">
+                    <span className="record text-[11px] text-slate-dim">
+                      On a €48/day compact, 4 days
                     </span>
-                    {quote.dailyPremium.amount > 0 && (
-                      <span className="text-[13px] text-slate-dim">/ day</span>
-                    )}
-                  </div>
-                  <p className="mt-2 text-[12px] text-slate-dim">
-                    On a €48/day compact. Scales with the car and your risk profile.
-                  </p>
-                </div>
+                  </th>
+                  {TIERS.map((tier) => {
+                    const spec = INSURANCE_TIER_SPECS[tier];
+                    const quote = quotes[tier];
+                    return (
+                      <th
+                        key={tier}
+                        scope="col"
+                        className={cn(
+                          'w-[19.33%] rounded-t-lg px-4 pb-5 pt-5 align-bottom',
+                          columnTint(tier),
+                        )}
+                      >
+                        <span className="flex items-baseline gap-2">
+                          <span className="display display-tight text-lg text-chalk">
+                            {spec.name}
+                          </span>
+                          {tier === 'PLUS' ? (
+                            <span className="record text-[10px] text-amber-400">most chosen</span>
+                          ) : null}
+                        </span>
+                        <span className="numeric mt-2 block text-[22px] font-bold leading-none text-chalk">
+                          {quote.dailyPremium.amount === 0
+                            ? 'Included'
+                            : formatMoney(quote.dailyPremium)}
+                        </span>
+                        <span className="mt-1.5 block text-[11.5px] font-normal text-slate-dim">
+                          {quote.dailyPremium.amount === 0 ? 'in every booking' : 'per day'}
+                        </span>
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
 
-                <div className="relative mt-6 rounded-md border border-white/[0.07] bg-ink-950/50 p-4">
-                  <p className="text-[10.5px] uppercase tracking-[0.18em] text-slate-dim">
-                    Your excess
-                  </p>
-                  <p
-                    className={cn(
-                      'numeric mt-1.5 text-2xl font-bold',
-                      quote.excess.amount === 0 ? 'text-cedar-400' : 'text-chalk',
-                    )}
+              <tbody>
+                {/* The two figures that actually decide the choice. */}
+                <tr>
+                  <th
+                    scope="row"
+                    className="border-t border-[var(--hairline-strong)] py-4 pr-6 align-top text-[13.5px] font-medium text-chalk"
                   >
-                    {quote.excess.amount === 0 ? 'Zero' : formatMoney(quote.excess)}
-                  </p>
-                  <p className="mt-2 text-[11.5px] leading-relaxed text-slate-dim">
-                    The most you pay toward repairs, whatever the bill comes to.
-                  </p>
-                  <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[11.5px]">
-                    <span className="text-slate-dim">Deposit</span>
-                    <span className="numeric text-chalk">
-                      ×{spec.depositMultiplier.toFixed(2)}
+                    Your excess
+                    <span className="mt-1 block text-[12px] font-normal leading-snug text-slate-dim">
+                      The most you pay toward repairs, whatever the bill comes to
                     </span>
-                  </div>
-                </div>
-
-                <ul className="relative mt-6 flex-1 space-y-2.5">
-                  {spec.covers.map((item) => (
-                    <li key={item} className="flex gap-2.5 text-[12.5px] leading-relaxed text-mist">
-                      <Check size={14} className="mt-0.5 shrink-0 text-cedar-400" />
-                      {item}
-                    </li>
-                  ))}
-                  {spec.excludes.slice(0, 2).map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-2.5 text-[12.5px] leading-relaxed text-slate-dim"
+                  </th>
+                  {TIERS.map((tier) => (
+                    <td
+                      key={tier}
+                      className={cn(
+                        'border-t border-[var(--hairline-strong)] px-4 py-4 align-top',
+                        columnTint(tier),
+                      )}
                     >
-                      <Minus size={14} className="mt-0.5 shrink-0 text-slate-dim" />
-                      {item}
-                    </li>
+                      <span
+                        className={cn(
+                          'numeric text-[17px] font-bold',
+                          quotes[tier].excess.amount === 0 ? 'text-cedar-400' : 'text-chalk',
+                        )}
+                      >
+                        {quotes[tier].excess.amount === 0
+                          ? 'Zero'
+                          : formatMoney(quotes[tier].excess)}
+                      </span>
+                    </td>
                   ))}
-                </ul>
-              </motion.div>
-            );
-          })}
-        </div>
+                </tr>
 
-        <Reveal delay={0.15}>
-          <div className="panel mt-6 flex flex-col gap-4 rounded-lg p-6 sm:flex-row sm:items-center sm:gap-6">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xs border border-cedar-500/25 bg-cedar-500/10">
-              <ShieldCheck size={19} className="text-cedar-400" />
-            </span>
-            <p className="text-[13.5px] leading-relaxed text-mist">
-              <span className="font-medium text-chalk">
-                Statutory liability is never something you buy here.
-              </span>{' '}
-              In Germany, Kfz-Haftpflichtversicherung is compulsory and follows the vehicle. In
-              Lebanon, the mandatory policy covers third-party bodily injury but not property damage
-              — which is exactly the gap KarRent protection fills.
-            </p>
+                <tr>
+                  <th
+                    scope="row"
+                    className="border-t border-[var(--hairline)] py-4 pr-6 align-top text-[13.5px] font-medium text-chalk"
+                  >
+                    Deposit held
+                    <span className="mt-1 block text-[12px] font-normal leading-snug text-slate-dim">
+                      Scaled against the car&rsquo;s base deposit
+                    </span>
+                  </th>
+                  {TIERS.map((tier) => (
+                    <td
+                      key={tier}
+                      className={cn(
+                        'border-t border-[var(--hairline)] px-4 py-4 align-top',
+                        columnTint(tier),
+                      )}
+                    >
+                      <span className="numeric text-[15px] text-mist">
+                        ×{INSURANCE_TIER_SPECS[tier].depositMultiplier.toFixed(2)}
+                      </span>
+                    </td>
+                  ))}
+                </tr>
+
+                {COVERAGE.map((row, index) => (
+                  <tr key={row.label}>
+                    <th
+                      scope="row"
+                      className={cn(
+                        'py-3 pr-6 align-top text-[13px] font-normal text-mist',
+                        index === 0
+                          ? 'border-t border-[var(--hairline-strong)]'
+                          : 'border-t border-[var(--hairline)]',
+                      )}
+                    >
+                      {row.label}
+                      {row.note ? (
+                        <span className="mt-0.5 block text-[11.5px] leading-snug text-slate-dim">
+                          {row.note}
+                        </span>
+                      ) : null}
+                    </th>
+                    {TIERS.map((tier) => {
+                      const included = RANK[tier] >= RANK[row.from];
+                      return (
+                        <td
+                          key={tier}
+                          className={cn(
+                            'px-4 py-3 align-top',
+                            index === COVERAGE.length - 1 && 'rounded-b-lg pb-5',
+                            index === 0
+                              ? 'border-t border-[var(--hairline-strong)]'
+                              : 'border-t border-[var(--hairline)]',
+                            columnTint(tier),
+                          )}
+                        >
+                          {included ? (
+                            <>
+                              <Check size={15} className="text-cedar-400" aria-hidden />
+                              <span className="sr-only">Included in {tier}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Minus size={15} className="text-ink-700" aria-hidden />
+                              <span className="sr-only">Not included in {tier}</span>
+                            </>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+
+              </tbody>
+            </table>
           </div>
+        </Reveal>
+
+        <Reveal delay={0.12}>
+          <p className="prose-measure mt-10 text-[14px] leading-relaxed text-mist">
+            <span className="text-chalk">Statutory liability is never something you buy here.</span>{' '}
+            In Germany, Kfz-Haftpflichtversicherung is compulsory and follows the vehicle. In
+            Lebanon, the mandatory policy covers third-party bodily injury but not property damage —
+            which is exactly the gap KarRent protection fills.
+          </p>
         </Reveal>
       </Container>
     </section>
