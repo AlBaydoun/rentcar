@@ -37,9 +37,9 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative mt-32 border-t border-white/[0.07] pt-20 pb-10">
+    <footer className="relative border-t border-[var(--hairline)] pb-10 pt-16">
       <Container>
-        <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Wordmark />
             <p className="mt-5 max-w-xs text-[13.5px] leading-relaxed text-mist">
@@ -61,25 +61,32 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {COLUMNS.map((column) => (
-            <div key={column.title}>
-              <h3 className="text-[11px] font-semibold record text-slate-dim">
-                {column.title}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {column.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-[13.5px] text-mist transition-colors hover:text-chalk"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Side by side on a phone: stacked full-width they make the footer
+              taller than the viewport. `contents` hands them back to the
+              parent grid at lg, so the desktop layout is untouched. Four
+              across needs more room than md gives it — at 768 the Trust
+              labels wrapped on every line. */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:contents">
+            {COLUMNS.map((column) => (
+              <div key={column.title}>
+                <h3 className="record text-[11px] font-semibold text-slate-dim">
+                  {column.title}
+                </h3>
+                <ul className="mt-4 space-y-2.5">
+                  {column.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-[13.5px] text-mist transition-colors hover:text-chalk"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="hairline-x my-10" />
